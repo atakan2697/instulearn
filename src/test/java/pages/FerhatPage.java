@@ -17,4 +17,16 @@ public class FerhatPage {
 
     @FindBy(xpath = "//a[@class='btn btn-primary btn-block mt-50']")
     public List<WebElement> subscribeNowButtonlari;
+
+    @FindBy(xpath = "//li[@class='cursor-pointer user-select-none d-flex xs-categories-toggle']")
+    public WebElement categoriesButton;
+
+    @FindBy(xpath = "//li[@class='nav-item']")
+    public List<WebElement> ustBarLinkleri;
+
+    @FindBy(xpath = "//img[@alt='Development icon']")
+    public WebElement developmentLink;
+
+    @FindBy(xpath = "//img[@alt='Web Development icon']")
+    public WebElement webdevelopmentLink;
 }

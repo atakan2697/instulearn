@@ -1,5 +1,5 @@
-Feature: US008 Kullanici anasayfa body bolumunde uyelik islemlerini gerceklestirebilmeli
-  @wip1
+Feature: US008 Kullanici anasayfa body bolumunde uyelik islemlerini gerceklestirir
+
   Scenario: TC_01 Anasayfa body bolumunde "Subscribe Now" yazisi gorunmeli.
 
     Given kullanici "instulearnUrl" anasayfaya gider
@@ -7,7 +7,7 @@ Feature: US008 Kullanici anasayfa body bolumunde uyelik islemlerini gerceklestir
     Then Subscribe Now yazisi goruntulenebilirligi test edilir
 
 
-  @wip2
+
     Scenario: TC_02 Anasayfa body bolumunde "Subscribe Now" bolumundeki butonlar gorunur olmali
     ve tiklandiginda login sayfasina yonlendirmeli
 
