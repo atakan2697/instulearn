@@ -450,12 +450,100 @@ public class AtakanStepdefinitions {
     public void messageAlanınaTıklanırVeMesajYazılır() {
         atakanPage.messasgeAlani.click();
         atakanPage.messasgeAlani.sendKeys("baglantı ile ilgili sorun yasiyorum");
+
     }
 
     @And("send message butonuna tıklanır")
     public void sendMessageButonunaTıklanır() {
         atakanPage.sendMessageButonu.click();
         ReusableMethods.bekle(1);
+
+    }
+
+    @When("courses support linkine tıklanır")
+    public void courses_support_linkine_tıklanır() {
+        atakanPage.coursesSupportLinki.click();
+        ReusableMethods.bekle(1);
+
+    }
+
+    @Then("destek özet boardları görünür olmalıdır")
+    public void destek_özet_boardları_görünür_olmalıdır() {
+        Assertions.assertTrue(atakanPage.destekOzetBoard.isDisplayed());
+
+    }
+
+    @Then("mesaj gecmisi listesi görünür olmalıdır")
+    public void mesaj_gecmisi_listesi_görünür_olmalıdır() {
+        js.executeScript("window.scrollBy(0,150)");
+        Assertions.assertTrue(atakanPage.youDontHaveSupportMessagesTexti.isDisplayed());
+        ReusableMethods.bekle(1);
+
+    }
+
+    @When("tickets linkine tıklanır")
+    public void tickets_linkine_tıklanır() {
+        atakanPage.ticketsLinki.click();
+
+    }
+
+    @When("message history bölümündeki mesaja tıklanır")
+    public void message_history_bölümündeki_mesaja_tıklanır() {
+        atakanPage.messagesHistoryBölümündekiLink.click();
+
+    }
+
+    @Then("reply to the conversation bölümündeki message bölümü doldurulur")
+    public void reply_to_the_conversation_bölümündeki_message_bölümü_doldurulur() {
+        js.executeScript("window.scrollBy(0,300)");
+        atakanPage.messasgeAlani.click();
+        atakanPage.messasgeAlani.sendKeys("sorun cözülmedi");
+        atakanPage.sendMessageButonu.click();
+        ReusableMethods.bekle(3);
+
+    }
+
+    @Then("açılan destek isteğini kapatmak için close request butonuna tıklanır")
+    public void açılan_destek_isteğini_kapatmak_için_close_request_butonuna_tıklanır() {
+        atakanPage.closeRequest.click();
+
+    }
+
+    @Then("status bölümünün closed olduğu doğrulanır")
+    public void status_bölümünün_closed_olduğu_doğrulanır() {
+        Assertions.assertTrue(atakanPage.statusTexti.isDisplayed());
+        Assertions.assertTrue(atakanPage.closedDurumu.isDisplayed());
+        ReusableMethods.bekle(1);
+
+    }
+
+
+    @When("açılan ticketlar listede görüntülenir")
+    public void açılan_ticketlar_listede_görüntülenir() {
+        Assertions.assertTrue(atakanPage.acilanTicketlarListesi.isDisplayed());
+
+    }
+
+    @Then("title bölümü görüntülenir")
+    public void title_bölümü_görüntülenir() {
+        Assertions.assertTrue(atakanPage.titleBölümü.isDisplayed());
+
+    }
+
+    @Then("updated date bölümü görüntülenir")
+    public void updated_date_bölümü_görüntülenir() {
+        Assertions.assertTrue(atakanPage.updateDateTexti.isDisplayed());
+
+    }
+
+    @Then("department bölümü görüntülenir")
+    public void department_bölümü_görüntülenir() {
+        Assertions.assertTrue(atakanPage.departmentTexti.isDisplayed());
+
+    }
+    @Then("status bölümü görüntülenir")
+    public void status_bölümü_görüntülenir() {
+        Assertions.assertTrue(atakanPage.statusTexti.isDisplayed());
 
     }
 }

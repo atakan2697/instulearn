@@ -184,6 +184,36 @@ public class AtakanPage {
     @FindBy(xpath = "//*[text()='Send Message']")
     public WebElement sendMessageButonu;
 
+    @FindBy(xpath = "//div[@class='activities-container mt-25 p-20 p-lg-35']")
+    public WebElement destekOzetBoard;
+
+    @FindBy(xpath = "//h2[@class='text-dark-blue']")
+    public WebElement youDontHaveSupportMessagesTexti;
+
+    @FindBy(xpath = "(//div[@class='user-inline-avatar d-flex align-items-center'])[1]")
+    public WebElement messagesHistoryBölümündekiLink;
+
+    @FindBy(xpath = "//*[text()='Close request']")
+    public WebElement closeRequest;
+
+    @FindBy(xpath = "(//*[@class='text-center font-14 text-gray font-weight-500'])[1]")
+    public WebElement updateDateTexti;
+
+    @FindBy(xpath = "(//*[@class='text-center font-14 text-gray font-weight-500'])[2]")
+    public WebElement departmentTexti;
+
+    @FindBy(xpath = "(//*[@class='text-center font-14 text-gray font-weight-500'])[3]")
+    public WebElement statusTexti;
+
+    @FindBy(xpath = "(//*[text()='Closed'])[2]")
+    public WebElement closedDurumu;
+
+    @FindBy(xpath = "//div[@id='conversationsList']")
+    public WebElement acilanTicketlarListesi;
+
+    @FindBy(xpath = "//*[@class='text-left font-14 text-gray font-weight-500']")
+    public WebElement titleBölümü;
+
 
 
 }
