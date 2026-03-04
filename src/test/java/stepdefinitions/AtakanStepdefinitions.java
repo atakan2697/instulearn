@@ -1,11 +1,13 @@
 package stepdefinitions;
 
 import com.github.javafaker.Faker;
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.*;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
 import pages.AtakanPage;
 import utilities.ConfigReader;
 import utilities.Driver;
@@ -382,6 +384,78 @@ public class AtakanStepdefinitions {
     public void ödemeniz_başarıyla_tamamlandı_texti_görüntülenmelidir() {
         ReusableMethods.bekle(3);
         Assertions.assertTrue(atakanPage.ödemeBasariliTexti.isDisplayed());
+
+    }
+
+    @Then("email alanina kayitli student maili girilir")
+    public void emailAlaninaKayitliStudentMailiGirilir() {
+        atakanPage.email.click();
+        atakanPage.email.sendKeys("atakan.user@instulearn.com");
+    }
+
+    @Given("sidebarda support linkine tıklanır")
+    public void sidebardaSupportLinkineTıklanır() {
+        atakanPage.supportLinki.click();
+        ReusableMethods.bekle(1);
+
+    }
+
+    @When("new linki görünür ve aktif olmalıdır")
+    public void new_linki_görünür_ve_aktif_olmalıdır() {
+        Assertions.assertTrue(atakanPage.newLinki.isDisplayed());
+        Assertions.assertTrue(atakanPage.newLinki.isEnabled());
+
+    }
+    @Then("courses support linki görünür ve aktif olmalıdır")
+    public void courses_support_linki_görünür_ve_aktif_olmalıdır() {
+        Assertions.assertTrue(atakanPage.coursesSupportLinki.isDisplayed());
+        Assertions.assertTrue(atakanPage.coursesSupportLinki.isEnabled());
+
+    }
+    @Then("tickets linki görünür ve aktif olmalıdır")
+    public void tickets_linki_görünür_ve_aktif_olmalıdır() {
+        Assertions.assertTrue(atakanPage.ticketsLinki.isDisplayed());
+        Assertions.assertTrue(atakanPage.ticketsLinki.isEnabled());
+
+    }
+
+    @Given("new linkine tıklanır")
+    public void new_linkine_tıklanır() {
+        atakanPage.newLinki.click();
+        ReusableMethods.bekle(1);
+    }
+    @Given("subject alanına tıklanır ve konu girilir")
+    public void subject_alanına_tıklanır_ve_konu_girilir() {
+        atakanPage.subjectAlani.click();
+        atakanPage.subjectAlani.sendKeys("baglantı problemi");
+        ReusableMethods.bekle(2);
+
+    }
+    @When("type alanına tıklanır ve platform support secilir")
+    public void type_alanına_tıklanır_ve_platform_support_secilir() {
+        Select select = new Select(atakanPage.typeAlani);
+        select.selectByVisibleText("Platform support");
+
+    }
+
+    @And("department alanına tıklanır ve content secilir")
+    public void departmentAlanınaTıklanırVeContentSecilir() {
+        atakanPage.departmentAlani.click();
+        ReusableMethods.bekle(1);
+        atakanPage.contentSecimi.click();
+        ReusableMethods.bekle(1);
+    }
+
+    @Then("message alanına tıklanır ve mesaj yazılır")
+    public void messageAlanınaTıklanırVeMesajYazılır() {
+        atakanPage.messasgeAlani.click();
+        atakanPage.messasgeAlani.sendKeys("baglantı ile ilgili sorun yasiyorum");
+    }
+
+    @And("send message butonuna tıklanır")
+    public void sendMessageButonunaTıklanır() {
+        atakanPage.sendMessageButonu.click();
+        ReusableMethods.bekle(1);
 
     }
 }
