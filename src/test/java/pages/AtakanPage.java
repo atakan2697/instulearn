@@ -154,4 +154,36 @@ public class AtakanPage {
     @FindBy(xpath = "//*[text()='Your payment successfully done...']")
     public WebElement ödemeBasariliTexti;
 
+    @FindBy(xpath = "//*[text()='Support']")
+    public WebElement supportLinki;
+
+    @FindBy(xpath = "//*[text()='New']")
+    public WebElement newLinki;
+
+    @FindBy(xpath = "//*[text()='Courses support']")
+    public WebElement coursesSupportLinki;
+
+    @FindBy(xpath = "//*[text()='Tickets']")
+    public WebElement ticketsLinki;
+
+    @FindBy(xpath = "//*[@class='form-control ']")
+    public WebElement subjectAlani;
+
+    @FindBy(xpath = "//*[@id='supportType']")
+    public WebElement typeAlani;
+
+    @FindBy(xpath = "(//*[@role='combobox'])[1]")
+    public WebElement departmentAlani;
+
+    @FindBy(xpath = "(//*[text()='Content'])[2]")
+    public WebElement contentSecimi;
+
+    @FindBy(xpath = "//*[@name='message']")
+    public WebElement messasgeAlani;
+
+    @FindBy(xpath = "//*[text()='Send Message']")
+    public WebElement sendMessageButonu;
+
+
+
 }
