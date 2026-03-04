@@ -43,5 +43,44 @@ public class ArdaStepdefinitions {
         // Sayfa basligi dogrulama
         Assertions.assertTrue(ardaPage.certificateValidationTitle.isDisplayed(),
                 "Certificate Validation basligi gorunmuyor!");
+    }@Then("Reserve a meeting kartinin gorunur oldugunu dogrular")
+    public void reserve_a_meeting_kartinin_gorunur_oldugunu_dogrular() {
+
+        js.executeScript("arguments[0].scrollIntoView({block:'center'});", ardaPage.reserveMeetingCardImg);
+        ReusableMethods.bekle(1);
+
+        Assertions.assertTrue(ardaPage.reserveMeetingCardImg.isDisplayed(),
+                "Reserve a meeting kart gorseli gorunmuyor!");
     }
+
+    @When("Reserve a meeting kartina tiklar")
+    public void reserve_a_meeting_kartina_tiklar() {
+
+        js.executeScript("arguments[0].scrollIntoView({block:'center'});", ardaPage.reserveMeetingCardImg);
+        ReusableMethods.bekle(1);
+
+        // img'nin parent'i olan <a> elementine tikla (navbar’a gitmez)
+        ardaPage.reserveMeetingCardImg.findElement(org.openqa.selenium.By.xpath("./parent::a")).click();
+        ReusableMethods.bekle(1);
+    }
+
+    @Then("Instructors sayfasinin acildigini dogrular")
+    public void instructors_sayfasinin_acildigini_dogrular() {
+        String expectedUrl = "https://qa.instulearn.com/instructors";
+        String actualUrl = Driver.getDriver().getCurrentUrl();
+        Assertions.assertEquals(expectedUrl, actualUrl);
+    }@Then("Her iki kartin da tiklanabilir oldugunu dogrular")
+    public void her_iki_kartin_da_tiklanabilir_oldugunu_dogrular() {
+
+        // Validate Certificates clickable mı?
+        Assertions.assertTrue(ardaPage.validateCertificatesCard.isEnabled(),
+                "Validate Certificates karti tiklanabilir degil!");
+
+        // Reserve a meeting clickable mı?
+        // IMG isEnabled bazen true/false saçmalayabilir, o yüzden parent <a> kontrol edeceğiz
+        var reserveLink = ardaPage.reserveMeetingCardImg.findElement(org.openqa.selenium.By.xpath("./parent::a"));
+        Assertions.assertTrue(reserveLink.isEnabled(),
+                "Reserve a meeting karti tiklanabilir degil!");
+    }
+
 }

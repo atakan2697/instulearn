@@ -15,7 +15,26 @@ public class ArdaPage {
     @FindBy(xpath = "//a[@href='/certificate_validation']")
     public WebElement validateCertificatesCard;
 
-    // Certificate Validation sayfa başlığı (sayfa açıldı mı kontrolü için)
+    // Certificate Validation sayfa başlığı
     @FindBy(xpath = "//*[text()='Certificate Validation']")
     public WebElement certificateValidationTitle;
+
+    @FindBy(xpath = "//input[@placeholder='Certificate ID']")
+    public WebElement certificateIdInput;
+
+    @FindBy(name = "captcha")
+    public WebElement captchaInput;
+
+    @FindBy(id = "formSubmit")
+    public WebElement validateButton;
+
+    @FindBy(css = "a[href='/instructors']")
+    public WebElement reserveMeetingCard;
+
+    @FindBy(css = "section.find-instructor-section")
+    public WebElement findInstructorSection;
+    @FindBy(css = "img[alt='Reserve a meeting - Home']")
+    public WebElement reserveMeetingCardImg;
+
+
 }
