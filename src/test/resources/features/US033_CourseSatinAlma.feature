@@ -41,7 +41,7 @@ Background:
     And secilen kurs kartında fiyat, tarih, ders adi ve instructor bilgileri görünür olmalıdır
     And kullanici 2 saniye bekler
 
-  @wip
+
   Scenario: TC05 kurs detay sayfasına yönlendirme
 
     Then kullanici 2 saniye bekler
@@ -52,4 +52,35 @@ Background:
     When ilk kurs kartına tıklar
     Then kurs detay sayfasına yönlendirme yapar
     When kurs kartında add to card ve buy now seçeneği varsa görünür ve aktif olmalıdır
-    Then kurs kartında add to card ve buy now seçeneği varsa about this course görüntülenmelidir
+    When about this course görünür ve aktif olmalıdır
+    Then comments alanına tıklanarak yorum yazılmalıdır
+    When post comments butonuna tıklanır
+    Then profil butonuna tıklanır
+    And instructor profil sayfası görünür olmalıdır
+
+
+    @gg
+  Scenario: TC06 kurs satın alma işlemi
+
+    When kullanıcı instulearn website logosuna tıklar
+    And profil simgesinin üzerine gelip logout butonuna tıklar
+    Then register butonuna tiklar yeni bir instructor hesabı oluşturur
+    And courses linkine tıklanır
+    Then download butonuna tiklanir
+    And sayfada scrool islemi yapılır
+    When ilk kurs kartına tıklar
+    And kurs detay sayfasına yönlendirme yapar
+    When buy now butonuna tıklanr
+    And stripe butonuna tıklanır
+    And start payment butonuna tıklanır
+    Then e-posta alanına gecerli mail adresi girilir
+    And kart bilgileri alanına gecerli kart bilgileri girilir
+    When kart sahibi adı alanına gecerli bilgiler girilir
+    And güvenli ödeme işlemine tıklanır
+    Then telefon numarası bilgileri girlir
+    When öde butonuna tıklanır
+    And ödemeniz başarıyla tamamlandı texti görüntülenmelidir
+
+
+
+

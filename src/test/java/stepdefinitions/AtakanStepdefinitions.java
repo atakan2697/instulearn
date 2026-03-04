@@ -1,8 +1,11 @@
 package stepdefinitions;
 
+import com.github.javafaker.Faker;
 import io.cucumber.java.en.*;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.interactions.Actions;
 import pages.AtakanPage;
 import utilities.ConfigReader;
 import utilities.Driver;
@@ -16,6 +19,11 @@ public class AtakanStepdefinitions {
     AtakanPage atakanPage = new AtakanPage();
     String loginWhd;
     String forgotPasswordWhd;
+    String courseWhd;
+    String kursProfilWhd;
+
+    Faker faker= new Faker();
+    Actions actions= new Actions(Driver.getDriver());
 
     JavascriptExecutor js= (JavascriptExecutor) Driver.getDriver();
 
@@ -147,6 +155,7 @@ public class AtakanStepdefinitions {
     public void courses_linkine_tıklanır() {
         atakanPage.coursesLinki.click();
     }
+
     @When("courses texti görüntülenmelidir")
     public void courses_texti_görüntülenmelidir() {
         Assertions.assertTrue(atakanPage.coursesTexti.isDisplayed());
@@ -180,9 +189,15 @@ public class AtakanStepdefinitions {
         ReusableMethods.bekle(2);
     }
 
+    @Then("sayfada scrool islemi yapılır")
+    public void sayfada_scrool_islemi_yapılır() {
+        js.executeScript("window.scrollBy(0,120)");
+        ReusableMethods.bekle(2);
+    }
+
     @Given("Listelenen kurs kartlari görünür olmalı")
     public void listelenen_kurs_kartlari_görünür_olmalı() {
-        Assertions.assertFalse(atakanPage.kursKartlariList.isEmpty());
+        Assertions.assertTrue(atakanPage.kursKartlariList.isDisplayed());
     }
     @Given("secilen kurs kartında fiyat, tarih, ders adi ve instructor bilgileri görünür olmalıdır")
     public void secilen_kurs_kartında_fiyat_tarih_ders_adi_ve_instructor_bilgileri_görünür_olmalıdır() {
@@ -195,35 +210,178 @@ public class AtakanStepdefinitions {
 
     @When("ilk kurs kartına tıklar")
     public void ilk_kurs_kartına_tıklar() {
-        ReusableMethods.bekle(1);
-       atakanPage.kursKartlariList.get(0).click();
-       ReusableMethods.bekle(2);
+        js.executeScript("window.scrollBy(0,200)");
+       atakanPage.kursKartlariList.click();
+       ReusableMethods.bekle(1);
     }
     @Then("kurs detay sayfasına yönlendirme yapar")
     public void kurs_detay_sayfasına_yönlendirme_yapar() {
+        String expectedUrl= "https://qa.instulearn.com/course/Cyber-Security";
+        String actualUrl= Driver.getDriver().getCurrentUrl();
+        Assertions.assertEquals(expectedUrl,actualUrl);
 
     }
     @When("kurs kartında add to card ve buy now seçeneği varsa görünür ve aktif olmalıdır")
     public void kurs_kartında_add_to_card_ve_buy_now_seçeneği_varsa_görünür_ve_aktif_olmalıdır() {
+        Assertions.assertTrue(atakanPage.addToCardButonu.isDisplayed());
+        Assertions.assertTrue(atakanPage.addToCardButonu.isEnabled());
+        Assertions.assertTrue(atakanPage.buyNowButonu.isDisplayed());
+        Assertions.assertTrue(atakanPage.buyNowButonu.isEnabled());
+    }
+
+    @When("about this course görünür ve aktif olmalıdır")
+    public void about_this_course_görünür_ve_aktif_olmalıdır() {
+        Assertions.assertTrue(atakanPage.aboutThisCourseTexti.isDisplayed());
+        Assertions.assertTrue(atakanPage.aboutThisCourseTexti.isEnabled());
 
     }
-    @Then("kurs kartında add to card ve buy now seçeneği varsa about this course görüntülenmelidir")
-    public void kurs_kartında_add_to_card_ve_buy_now_seçeneği_varsa_about_this_course_görüntülenmelidir() {
+    @Then("comments alanına tıklanarak yorum yazılmalıdır")
+    public void comments_alanına_tıklanarak_yorum_yazılmalıdır() {
+        ReusableMethods.bekle(1);
+        js.executeScript("arguments[0].scrollIntoView(true);", atakanPage.commentsTexti);
+        ReusableMethods.bekle(1);
+        String commentAlaniYazisi= faker.artist().name();
+        atakanPage.commentsAlani.click();
+        atakanPage.commentsAlani.sendKeys(commentAlaniYazisi);
+        ReusableMethods.bekle(3);
 
-        for (int i = 0; i < atakanPage.kursKartlariList.size(); i++) {
+    }
+    @When("post comments butonuna tıklanır")
+    public void post_comments_butonuna_tıklanır() {
+        atakanPage.postCommentButonu.click();
+        ReusableMethods.bekle(1);
 
-            atakanPage.kursKartlariList.get(i).click();
-            if (atakanPage.addToCardButonu.isDisplayed()){
-                atakanPage.addToCardButonu.click();
-            }
-            else {
-                Driver.getDriver().navigate().back();
-                atakanPage.kursKartlariList.get(i).click();
-                System.out.println(atakanPage.kursKartlariList.get(i).getText().toString());
+    }
+    @Then("profil butonuna tıklanır")
+    public void profil_butonuna_tıklanır() {
+        ReusableMethods.bekle(1);
+        js.executeScript("arguments[0].scrollIntoView(true);", atakanPage.kursProfilAvatarImg);
+        ReusableMethods.bekle(2);
+        atakanPage.kursProfilButonu.click();
 
+    }
+    @Then("instructor profil sayfası görünür olmalıdır")
+    public void instructor_profil_sayfası_görünür_olmalıdır() {
+        ReusableMethods.bekle(1);
+        courseWhd= Driver.getDriver().getWindowHandle();
+        System.out.println("Course Whd :" + courseWhd);
+        Set<String> acikTumWindowlarinWhdSeti= Driver.getDriver().getWindowHandles();
+        kursProfilWhd= "";
+
+        for (String eachWhd:acikTumWindowlarinWhdSeti ){
+
+            if (!eachWhd.equals(courseWhd)){
+                kursProfilWhd= eachWhd;
             }
         }
 
+        Driver.getDriver().switchTo().window(kursProfilWhd);
+
+        String expectedInstructorProfilUrl = "https://qa.instulearn.com/users/934/profile";
+        String actualInstructorProfilUrl = Driver.getDriver().getCurrentUrl();
+        Assertions.assertEquals(expectedInstructorProfilUrl,actualInstructorProfilUrl);
+
+    }
+
+    @When("kullanıcı instulearn website logosuna tıklar")
+    public void kullanıcı_instulearn_website_logosuna_tıklar() {
+        ReusableMethods.bekle(1);
+       atakanPage.siteLogo.click();
+    }
+    @When("profil simgesinin üzerine gelip logout butonuna tıklar")
+    public void profil_simgesinin_üzerine_gelip_logout_butonuna_tıklar() {
+        ReusableMethods.bekle(1);
+        actions.moveToElement(atakanPage.atakanProfilButonu).perform();
+        ReusableMethods.bekle(1);
+        atakanPage.logoutButonu.click();
+    }
+    @Then("register butonuna tiklar yeni bir instructor hesabı oluşturur")
+    public void register_butonuna_tiklar_yeni_bir_instructor_hesabı_oluşturur() {
+        atakanPage.registerButonu.click();
+        js.executeScript("window.scrollBy(0,100)");
+        atakanPage.registerInstructorSecimi.click();
+        atakanPage.email.click();
+        atakanPage.email.clear();
+        atakanPage.email.sendKeys(faker.internet().emailAddress());
+        atakanPage.registerFullName.click();
+        atakanPage.registerFullName.sendKeys(faker.name().fullName());
+        atakanPage.password.click();
+        atakanPage.password.clear();
+       // String password=ConfigReader.getProperty("gecerliPassword");
+        atakanPage.password.sendKeys(ConfigReader.getProperty("gecerliPassword"));
+        atakanPage.registerConfirmPassword.click();
+        atakanPage.registerConfirmPassword.sendKeys(ConfigReader.getProperty("gecerliPassword"));
+        js.executeScript("arguments[0].click();", atakanPage.registerIAgreeButonu);
+        ReusableMethods.bekle(1);
+        atakanPage.registerSignUpButonu.click();
+        ReusableMethods.bekle(1);
+
+    }
+
+    @When("buy now butonuna tıklanr")
+    public void buy_now_butonuna_tıklanr() {
+        js.executeScript("window.scrollBy(0,150)");
+        atakanPage.buyNowButonu.click();
+        ReusableMethods.bekle(1);
+
+    }
+    @When("stripe butonuna tıklanır")
+    public void stripe_butonuna_tıklanır() {
+        atakanPage.stripeButonu.click();
+    }
+    @When("start payment butonuna tıklanır")
+    public void start_payment_butonuna_tıklanır() {
+        atakanPage.startPaymentButonu.click();
+
+    }
+    @Then("e-posta alanına gecerli mail adresi girilir")
+    public void e_posta_alanına_gecerli_mail_adresi_girilir() {
+        atakanPage.email.click();
+        atakanPage.email.sendKeys(faker.internet().emailAddress());
+        ReusableMethods.bekle(2);
+    }
+    @Then("kart bilgileri alanına gecerli kart bilgileri girilir")
+    public void kart_bilgileri_alanına_gecerli_kart_bilgileri_girilir() {
+        atakanPage.ödemeKartBilgileri.click();
+        atakanPage.ödemeKartBilgileri.sendKeys("4242424242424242");
+        atakanPage.ödemeKartCC.click();
+        atakanPage.ödemeKartCC.sendKeys("1027");
+        atakanPage.ödemeKartCVC.click();
+        atakanPage.ödemeKartCVC.sendKeys("777");
+        ReusableMethods.bekle(5);
+
+    }
+    @When("kart sahibi adı alanına gecerli bilgiler girilir")
+    public void kart_sahibi_adı_alanına_gecerli_bilgiler_girilir() {
+        atakanPage.ödemeKartAdıSoyadı.click();
+        atakanPage.ödemeKartAdıSoyadı.sendKeys(faker.name().fullName());
+        ReusableMethods.bekle(2);
+
+    }
+    @When("güvenli ödeme işlemine tıklanır")
+    public void güvenli_ödeme_işlemine_tıklanır() {
+        js.executeScript("arguments[0].click();", atakanPage.güvenliÖdeme);
+        ReusableMethods.bekle(1);
+
+    }
+    @Then("telefon numarası bilgileri girlir")
+    public void telefon_numarası_bilgileri_girlir() {
+        atakanPage.ödemeTelBilgileri.click();
+        atakanPage.ödemeTelBilgileri.sendKeys(faker.phoneNumber().cellPhone());
+        js.executeScript("window.scrollBy(0,250)");
+        ReusableMethods.bekle(3);
+    }
+    @When("öde butonuna tıklanır")
+    public void öde_butonuna_tıklanır() {
+
+        atakanPage.ödeButonu.click();
+        ReusableMethods.bekle(1);
+
+    }
+    @When("ödemeniz başarıyla tamamlandı texti görüntülenmelidir")
+    public void ödemeniz_başarıyla_tamamlandı_texti_görüntülenmelidir() {
+        ReusableMethods.bekle(3);
+        Assertions.assertTrue(atakanPage.ödemeBasariliTexti.isDisplayed());
 
     }
 }
