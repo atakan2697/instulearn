@@ -1,6 +1,6 @@
 Feature: US_001 Visitor ana sayfaya erisebilmeli
 
-  @wip
+
   Scenario: TC_US001_001 Visitor ana sayfaya basariyla erisir
 
     Given kullanici "instulearnUrl" anasayfaya gider

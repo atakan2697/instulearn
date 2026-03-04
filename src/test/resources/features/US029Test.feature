@@ -38,5 +38,3 @@ Feature: Marketing yonetimi  discounts and promotions
     And kullanici 10 saniye bekler
     Then odeme isleminin basarili oldugu dogrulanir
     And secilen promosyon planinin aktif olarak goruntulendigi dogrulanir
-
-

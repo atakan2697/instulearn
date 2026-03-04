@@ -489,11 +489,11 @@ public class HazalStepdefinitions {
         hazalPage.dashboardFinancial.click();
         hazalPage.dashboardFinancialChargeAccount.click();
 
-       String  firstCuzdanBakiyesiStr=hazalPage.chargeAccountPageCuzdanBakiyesi.getText();
+        String  firstCuzdanBakiyesiStr=hazalPage.chargeAccountPageCuzdanBakiyesi.getText();
 
-       firstCuzdanBakiyesiStr=firstCuzdanBakiyesiStr.replaceAll("\\D","");
+        firstCuzdanBakiyesiStr=firstCuzdanBakiyesiStr.replaceAll("\\D","");
 
-       firstCuzdanBakiyesi=Integer.parseInt(firstCuzdanBakiyesiStr);
+        firstCuzdanBakiyesi=Integer.parseInt(firstCuzdanBakiyesiStr);
 
 
     }

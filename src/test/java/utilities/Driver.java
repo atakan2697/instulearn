@@ -40,7 +40,7 @@ public class Driver {
                 default:
                     driver= new ChromeDriver();
             }
-          //  driver= new ChromeDriver();
+            //  driver= new ChromeDriver();
             driver.manage().window().maximize();
             driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         }
@@ -48,7 +48,7 @@ public class Driver {
     }
 
     public static void quitDriver(){
-      driver.quit();
-      driver = null;
+        driver.quit();
+        driver = null;
     }
 }
