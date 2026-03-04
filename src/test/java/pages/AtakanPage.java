@@ -40,15 +40,6 @@ public class AtakanPage {
     @FindBy(xpath = "//div[@class='invalid-feedback']")
     public WebElement emailAlanindakiHataMesaji;
 
-    @FindBy(id = "filterLanguagecourse")
-    public WebElement filtrelemeCourse;
-
-    @FindBy(xpath = "//*[text()='Type']")
-    public WebElement typeTexti;
-
-    @FindBy(xpath = "//*[text()='Filter items']")
-    public WebElement filterItems;
-
     @FindBy(xpath = "(//*[text()='Courses'])[1]")
     public WebElement coursesLinki;
 
@@ -65,7 +56,7 @@ public class AtakanPage {
     public WebElement downloadSecenegi;
 
     @FindBy (xpath = "//div[@class='image-box']")
-    public List<WebElement> kursKartlariList;
+    public WebElement kursKartlariList;
 
     @FindBy(xpath = "//div[@class='webinar-price-box mt-25']")
     public List<WebElement> kursKartlariFiyat;
@@ -85,7 +76,82 @@ public class AtakanPage {
     @FindBy(xpath = "//button[@class='btn btn-outline-danger mt-20 js-course-direct-payment']")
     public WebElement buyNowButonu;
 
+    @FindBy(xpath = "//*[text()='Register']")
+    public WebElement registerButonu;
 
+    @FindBy(xpath = "//*[@alt='site logo']")
+    public WebElement siteLogo;
 
+    @FindBy(xpath = "//span[@class='font-16 user-name ml-10 text-dark-blue font-14']")
+    public WebElement atakanProfilButonu;
+
+    @FindBy(xpath = "//*[text()='Logout']")
+    public WebElement logoutButonu;
+
+    @FindBy(xpath = "//*[text()='About this course']")
+    public WebElement aboutThisCourseTexti;
+
+    @FindBy(xpath = "//*[@name='comment']")
+    public WebElement commentsAlani;
+
+    @FindBy(xpath = "//*[text()='Post comment']")
+    public WebElement postCommentButonu;
+
+    @FindBy(xpath = "//*[text()='Comments ']")
+    public WebElement commentsTexti;
+
+    @FindBy(xpath = "//a[text()='Profile']")
+    public WebElement kursProfilButonu;
+
+    @FindBy(xpath = "//div[@class='teacher-avatar mt-5']")
+    public WebElement kursProfilAvatarImg;
+
+    @FindBy(xpath = "//input[@name='full_name']")
+    public WebElement registerFullName;
+
+    @FindBy(xpath = "//input[@id='confirm_password']")
+    public WebElement registerConfirmPassword;
+
+    @FindBy(xpath = "//*[@id='term']")
+    public WebElement registerIAgreeButonu;
+
+    @FindBy(xpath = "//button[@class='btn btn-primary btn-block mt-20']")
+    public WebElement registerSignUpButonu;
+
+    @FindBy(xpath = "//*[@for='role_teacher']")
+    public WebElement registerInstructorSecimi;
+
+    @FindBy(xpath = "//*[text()='Stripe']")
+    public WebElement stripeButonu;
+
+    @FindBy(xpath = "//*[text()='Start Payment']")
+    public WebElement startPaymentButonu;
+
+    @FindBy(xpath = "//*[text()='Link olmadan öde']")
+    public WebElement linkOlmadanÖdeButonu;
+
+    @FindBy(xpath = "//input[@autocomplete='cc-number']")
+    public WebElement ödemeKartBilgileri;
+
+    @FindBy(xpath = "//input[@autocomplete='cc-exp']")
+    public WebElement ödemeKartCC;
+
+    @FindBy(xpath = "//input[@autocomplete='cc-csc']")
+    public WebElement ödemeKartCVC;
+
+    @FindBy(xpath = "//input[@autocomplete='cc-name']")
+    public WebElement ödemeKartAdıSoyadı;
+
+    @FindBy(xpath = "//input[@id='enableStripePass']")
+    public WebElement güvenliÖdeme;
+
+    @FindBy(xpath = "//*[@id='phoneNumber']")
+    public WebElement ödemeTelBilgileri;
+
+    @FindBy(xpath = "//div[@class='SubmitButton-IconContainer']")
+    public WebElement ödeButonu;
+
+    @FindBy(xpath = "//*[text()='Your payment successfully done...']")
+    public WebElement ödemeBasariliTexti;
 
 }
