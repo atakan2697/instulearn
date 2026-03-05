@@ -59,7 +59,7 @@ Background:
     And instructor profil sayfası görünür olmalıdır
 
 
-    @gg
+
   Scenario: TC06 kurs satın alma işlemi
 
     When kullanıcı instulearn website logosuna tıklar

@@ -4,7 +4,10 @@ import io.cucumber.java.en.*;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.Select;
 import pages.MelahatnurPage;
+import utilities.ConfigReader;
 import utilities.Driver;
 
 public class MelahatnurStepdefinitions {
@@ -78,7 +81,86 @@ public class MelahatnurStepdefinitions {
 
             Assertions.assertTrue(isExist);
         }
-        }
+
+
+
+
+
+        // ================================== US031====================================//
+
+    @Given("kullanici login butonuna basar ve admin olarak giris yapar")
+    public void kullanici_login_butonuna_basar_ve_admin_olarak_giris_yapar() {
+        melahatnurPage.logineGidisButonu.click();
+        melahatnurPage.loginEmailButonu.sendKeys("melahatnur.admin@instulearn.com");
+
+        melahatnurPage.loginSifreButonu.sendKeys(ConfigReader.getProperty("gecerliPassword"));
+        melahatnurPage.loginButonu.click();
+
+    }
+    @When("slider alanini kontrol eder ve settings linkinin gorunur oldugunu kontrol eder")
+    public void slider_alanini_kontrol_eder_ve_settings_linkinin_gorunur_oldugunu_kontrol_eder() {
+
+        Assertions.assertTrue(melahatnurPage.settingsLinki.isDisplayed());
+
+    }
+    @Then("Settings linkinin tiklanabilirligini kontrol eder")
+    public void settings_linkinin_tiklanabilirligini_kontrol_eder() {
+
+        Assertions.assertTrue(melahatnurPage.settingsLinki.isEnabled());
+    }
+
+    @When("kullanici settings sayfasinda olur")
+    public void kullanici_settings_sayfasinda_olur() {
+        JavascriptExecutor js = (JavascriptExecutor) Driver.getDriver();
+        js.executeScript("arguments[0].click();", melahatnurPage.settingsLinki);
+    melahatnurPage.settingsLinki.click();
+    }
+    @When("basic information sayfasinda zorunlu alanlari gecerli verilerle doldurur")
+    public void basic_information_sayfasinda_zorunlu_alanlari_gecerli_verilerle_doldurur() {
+
+        melahatnurPage.basicInformationEmail.sendKeys("melahatnur.admin@instulearn.com");
+
+        melahatnurPage.basicInformationName.sendKeys("Melahatnur");
+        melahatnurPage.basicInformationPassword.sendKeys("gecerliPassword");
+        melahatnurPage.basicInformationPasswordTekrari.sendKeys("gecerliPassword");
+        melahatnurPage.basicInformationTelefonNumber.sendKeys("0544 765 78 90");
+
+
+        Select langSelect = new Select(melahatnurPage.basicInformationLanguange);
+        langSelect.selectByVisibleText("English");
+
+        Select timeSelect = new Select(melahatnurPage.basicInformationTimeZone);
+        timeSelect.selectByValue("UTC");
+
+        melahatnurPage.basicInformationJoinEmail.click();
+        melahatnurPage.basicInformationEnableProfil.click();
+
+    }
+    @When("kaydedip ilerler")
+    public void kaydedip_ilerler() {
+        melahatnurPage.saveButonu.click();
+        melahatnurPage.nextButonu.click();
+
+    }
+
+
+    @When("basic information sayfasinda zorunlu alanlardan birini bos birakir")
+    public void basicInformationSayfasindaZorunluAlanlardanBiriniBosBirakir() {
+        melahatnurPage.basicInformationEmail.sendKeys("melahatnur.admin@instulearn.com");
+        melahatnurPage.basicInformationName.sendKeys("Melahatnur");
+        melahatnurPage.basicInformationTelefonNumber.sendKeys("0544 765 78 90");
+
+
+        Select langSelect = new Select(melahatnurPage.basicInformationLanguange);
+        langSelect.selectByVisibleText("English");
+
+        Select timeSelect = new Select(melahatnurPage.basicInformationTimeZone);
+        timeSelect.selectByValue("UTC");
+
+        melahatnurPage.basicInformationJoinEmail.click();
+        melahatnurPage.basicInformationEnableProfil.click();
+    }
+}
 
 
 
