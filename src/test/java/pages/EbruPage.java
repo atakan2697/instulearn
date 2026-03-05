@@ -42,6 +42,9 @@ public class EbruPage {
             "or contains(translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'reset')]")
     public WebElement resetSuccessMessage;
 
+    @FindBy(xpath = "//a[contains(@href,'login') or contains(text(),'Login')]")
+    public WebElement backToLoginLink;
+
 
 
 }

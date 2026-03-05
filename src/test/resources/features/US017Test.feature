@@ -22,3 +22,14 @@ Feature: US_017 Kayitli kullanici sifresini unuttugunda reset islemi yapabilmeli
     When kayitli email olarak "wisequarter01@instulearn.com" girilir
     And reset password butonuna tiklanir
     Then basari mesaji goruntulenmeli ve reset email gonderildigi yazmali
+
+
+  @wip
+  Scenario: TC_US017_003 Password recovery sayfasindan login sayfasina geri donus
+
+    Given kullanici login sayfasina gider
+    When forgot your password linkine tiklar
+    Then forget password sayfasina yonlendirilmeli
+
+    When login sayfasina donus linkine tiklar
+    Then kullanici login sayfasina yonlendirilir

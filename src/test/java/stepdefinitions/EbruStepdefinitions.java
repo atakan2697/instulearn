@@ -190,4 +190,22 @@ public class EbruStepdefinitions {
         Assertions.assertTrue(ebruPage.resetPasswordButton.isDisplayed());
         Assertions.assertTrue(ebruPage.resetPasswordButton.isEnabled());
     }
+
+    @When("login sayfasina donus linkine tiklar")
+    public void login_sayfasina_donus_linkine_tiklar() {
+
+        ReusableMethods.bekle(1);
+
+        ebruPage.backToLoginLink.click();
+    }
+
+    @Then("kullanici login sayfasina yonlendirilir")
+    public void kullanici_login_sayfasina_yonlendirilir() {
+
+        ReusableMethods.bekle(2);
+
+        String currentUrl = Driver.getDriver().getCurrentUrl();
+
+        Assertions.assertTrue(currentUrl.contains("login"));
+    }
 }
