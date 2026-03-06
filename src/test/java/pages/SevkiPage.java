@@ -130,21 +130,130 @@ public class SevkiPage {
     @FindBy(xpath = "//button[normalize-space()='Login']")
     public WebElement loginButton;
 
+    @FindBy(xpath = "//span[normalize-space()='Course Bundles']")
+    public WebElement courseBundlesMenu;
 
+    @FindBy(xpath = "//a[@href='/panel/bundles/new']")
+    public WebElement newButton;
 
+    @FindBy(xpath = "//input[@name='title']")
+    public WebElement titleInput;
 
+    @FindBy(xpath = "//input[@name='seo_description']")
+    public WebElement seoMetaDescriptionInput;
 
+    @FindBy(xpath = "//input[@name='thumbnail']")
+    public WebElement thumbnailInput;
 
+    @FindBy(xpath = "//input[@name='image_cover']")
+    public WebElement coverImageUpload;
 
+    @FindBy(xpath = "//div[@class='note-editable card-block']")
+    public WebElement descriptionEditor;
 
+    @FindBy(xpath = "//button[@id='getNextStep']")
+    public WebElement nextButton;
 
+    @FindBy(xpath = "//a[normalize-space()='Previous']")
+    public WebElement previousButton;
 
+    @FindBy(xpath = "//button[normalize-space()='Send for Review']")
+    public WebElement sendForReviewButton;
 
+    @FindBy(xpath = "//button[normalize-space()='Save as Draft']")
+    public WebElement saveAsDraftButton;
 
+    @FindBy(xpath = "//input[@placeholder='Type tag name and press enter (Max : 5)']")
+    public WebElement tagsInput;
 
+    @FindBy(xpath = "//select[@id='categories']")
+    public WebElement categoryDropdown;
 
+    @FindBy(xpath = "//button[@id='getNextStep']")
+    public WebElement nextExtraButton;
 
+    @FindBy(xpath = "//label[@for='subscribeSwitch']")
+    public WebElement subscribeSwitchLabel;
 
+    @FindBy(xpath = "//input[@name='access_days']")
+    public WebElement accessPeriodInput;
+
+    @FindBy(xpath = "//input[@placeholder='Enter 0 for Free']")
+    public WebElement priceInput;
+
+    @FindBy(xpath = "//button[normalize-space()='New Plan']")
+    public WebElement newPlanButton;
+
+    @FindBy(xpath = "//label[normalize-space()='Title']/following::input[1]")
+    public WebElement planTitleInput;
+
+    @FindBy(xpath = "//label[normalize-space()='Discount (%)']/following::input[1]")
+    public WebElement discountInput;
+
+    @FindBy(xpath = "//label[normalize-space()='Capacity']/following::input[1]")
+    public WebElement capacityInput;
+
+    @FindBy(xpath = "//input[@name='ajax[new][start_date]']")
+    public WebElement startDateInput;
+
+    @FindBy(xpath = "//input[@name='ajax[new][end_date]']")
+    public WebElement endDateInput;
+
+    @FindBy(xpath = "//button[normalize-space()='Save']")
+    public WebElement savePlanButton;
+
+    @FindBy(xpath = "//button[@id='getNextStep']")
+    public WebElement nextPricingButton;
+
+    @FindBy(xpath = "//button[contains(@class,'btn-primary') and text()='Next']")
+    public WebElement nextContentButton;
+
+    @FindBy(xpath = "//button[normalize-space()='New FAQ']")
+    public WebElement newFaqButton;
+
+    @FindBy(xpath = "//label[normalize-space()='Title']/following::input[1]")
+    public WebElement faqTitleInput;
+
+    @FindBy(xpath = "//label[normalize-space()='Answer']/following::textarea[1]")
+    public WebElement faqAnswerTextarea;
+
+    @FindBy(xpath = "//button[normalize-space()='Save']")
+    public WebElement saveFaqButton;
+
+    @FindBy(xpath = "//button[@id='getNextStep']")
+    public WebElement nextFaqButton;
+
+    @FindBy(xpath = "//textarea[@name='message_for_reviewer']")
+    public WebElement messageForReviewerTextArea;
+
+    @FindBy(xpath = "//input[@id='rulesSwitch']")
+    public WebElement termsSwitch;
+
+    @FindBy(xpath = "//label[@for='rulesSwitch']")
+    public WebElement rulesSwitchLabel;
+
+    @FindBy(xpath = "//button[normalize-space()='Save as Draft']")
+    public WebElement saveMessageAsDraftButton;
+
+    @FindBy(xpath = "//a[@href='/panel/bundles']")
+    public WebElement myBundlesButton;
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

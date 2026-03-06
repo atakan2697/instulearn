@@ -1,6 +1,7 @@
 package stepdefinitions;
 
 import io.cucumber.java.PendingException;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -9,6 +10,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.SevkiPage;
 import utilities.ConfigReader;
@@ -16,6 +18,8 @@ import utilities.Driver;
 import utilities.ReusableMethods;
 
 import java.time.Duration;
+
+import static utilities.Driver.driver;
 
 public class SevkiStepDefinitions {
 
@@ -53,7 +57,7 @@ public class SevkiStepDefinitions {
                 "Search butonu görünür değil veya aktif değil!"
         );
     }
-//-------------------------------------------------- US_41->TC_01 ---------------------------------------------------
+//-------------------------------------------------- US_41--------------------------------------------------------------
 
 
     @When("kullanici login butonuna basar ve student olarak giris yapar")
@@ -91,8 +95,6 @@ public class SevkiStepDefinitions {
         Assertions.assertTrue(sevkiPage.myPurchasesLink.isEnabled());
     }
 
-    //--------------------------------------------------------US_41->TC_02------------------------------------------------
-
 
     @When("{string} linkine tıklar")
     public void linkine_tıklar(String string) {
@@ -118,10 +120,6 @@ public class SevkiStepDefinitions {
     }
 
 
-//--------------------------------------------------------US_41->TC_03----------------------------------------------------------
-
-
-
     @Then("Kurs baslıgına tıklanmalı")
     public void kurs_baslıgına_tıklanmalıdır() {
 
@@ -138,13 +136,11 @@ public class SevkiStepDefinitions {
 
     }
 
-    //------------------------------------------  US_41->TC_04-------------------------------------------
 
     @When("kullanici Favorites linkine tiklar")
     public void kullanici_favorites_linkine_tiklar() {
 
         sevkiPage.favoritesButton.click();
-
 
     }
 
@@ -162,19 +158,183 @@ public class SevkiStepDefinitions {
 
     }
 
-    @When("Course Bundles menusunun gorunur ve tiklanabilir oldugu dogrulanir")
-    public void courseBundlesMenusununGorunurVeTiklanabilirOlduguDogrulanir() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new PendingException();
+    //-------------------------------------------US_23------------------------------------------------------------------
+
+    @When("kullanici login butonuna basar ve ınstructor olarak giris yapar")
+    public void kullaniciLoginButonunaBasarVeInstructorOlarakGirisYapar() {
+
+
+        sevkiPage.loginLink.click();
+
+        sevkiPage.emailInput.sendKeys("sevki.admin@instulearn.com");
+
+        sevkiPage.passwordInput.sendKeys(ConfigReader.getProperty("gecerliPassword"));
+
+        sevkiPage.loginButton.click();
+
+        ReusableMethods.bekle(2);
+
     }
 
-    //----------------------------------------------US_23->TC_01----------------------------------------------
+    @When("Course Bundles menusunun gorunur ve tiklanabilir oldugu dogrulanir")
+    public void courseBundlesMenusununGorunurVeTiklanabilirOlduguDogrulanir() {
+        Assertions.assertTrue(sevkiPage.courseBundlesMenu.isEnabled());
+    }
+
+    @When("kullanici Course Bundles menusunu tıklar")
+    public void kullaniciCourseBundlesMenusunuTıklar() {
+        sevkiPage.courseBundlesMenu.click();
+    }
+
+    @Then("New linki görünür ve tıklanabilir olduğu doğrulanır")
+    public void newLinkiGörünürVeTıklanabilirOlduğuDoğrulanır() {
+        Assertions.assertTrue(sevkiPage.newButton.isEnabled());
+    }
+
+    @When("New linkine tıklanması")
+    public void newLinkineTıklanması() {
+        sevkiPage.newButton.click();
+        ReusableMethods.bekle(2);
+
+    }
+
+    @And("Form bilgilerinin doldurulması")
+    public void formBilgilerininDoldurulması() {
+        sevkiPage.titleInput.sendKeys("DevOps Starter Bundle");
+        sevkiPage.seoMetaDescriptionInput.sendKeys("temel kavramlar, CI/CD, Docker, Kubernetes");
+
+        sevkiPage.thumbnailInput.sendKeys("C:\\\\Users\\\\user\\\\Desktop\\\\thumbnail.png");
+        sevkiPage.coverImageUpload.sendKeys("C:\\\\Users\\\\user\\\\Desktop\\\\coverımege.png");
+
+        sevkiPage.descriptionEditor.sendKeys("DevOps Başlangıc Paketi,  kapsamlı bir egitim paketidir");
+
+        ReusableMethods.bekle(4);
+
+    }
+
+    @And("Previous butonunun gorunur ve tiklanabilir oldugu dogrulanir")
+    public void previousButonununGorunurVeTiklanabilirOlduguDogrulanir() {
+
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+
+        Assertions.assertTrue(sevkiPage.previousButton.isEnabled());
+        ReusableMethods.bekle(4);
+    }
+
+    @And("Next butonunun gorunur ve tiklanabilir oldugu dogrulanir")
+    public void nextButonununGorunurVeTiklanabilirOlduguDogrulanir() {
+        Assertions.assertTrue(sevkiPage.nextButton.isEnabled());
+    }
 
 
+    @And("Send for Review butonunun gorunur ve tiklanabilir oldugu dogrulanir")
+    public void sendForReviewButonununGorunurVeTiklanabilirOlduguDogrulanir() {
 
+        Assertions.assertTrue(sevkiPage.sendForReviewButton.isEnabled());
+    }
 
+    @And("Save as Draft butonunun gorunur ve tiklanabilir oldugu dogrulanir")
+    public void saveAsDraftButonununGorunurVeTiklanabilirOlduguDogrulanir() {
 
+        Assertions.assertTrue(sevkiPage.saveAsDraftButton.isEnabled());
+    }
+
+    @Then("Next butonunun tıklanması")
+    public void nextButonununTıklanması() {
+        sevkiPage.nextButton.click();
+        ReusableMethods.bekle(4);
+    }
+
+    @Then("Extra Information form bilgilerinin doldurulması")
+    public void extraInformationFormBilgilerininDoldurulması() {
+        sevkiPage.tagsInput.sendKeys("devops-engineer");
+
+        Select select = new Select(sevkiPage.categoryDropdown);
+        select.selectByVisibleText("DevOps");
+
+        ReusableMethods.bekle(4);
+    }
+
+    @Then("Extra Information Next butonunun tıklanması")
+    public void extraInformationNextButonununTıklanması() {
+
+        sevkiPage.nextExtraButton.click();
+    }
+
+    @Then("Pricing basligi altında odeme formu doldurulması")
+    public void pricingBasligiAltındaOdemeFormuDoldurulması() {
+        sevkiPage.subscribeSwitchLabel.click();
+        sevkiPage.accessPeriodInput.sendKeys("30");
+        sevkiPage.priceInput.sendKeys("200");
+
+    }
+
+    @Then("Odeme planı olusturulması")
+    public void odemePlanıOlusturulması() {
+
+        sevkiPage.newPlanButton.click();
+        sevkiPage.planTitleInput.sendKeys("Bahar Indirimi");
+        sevkiPage.discountInput.sendKeys("10");
+        sevkiPage.capacityInput.sendKeys("50");
+        sevkiPage.startDateInput.sendKeys("2026-03-07");
+        sevkiPage.endDateInput.sendKeys("2026-04-07");
+        sevkiPage.savePlanButton.click();
+
+    }
+    @Then("Pricing Next butonunun tıklanması")
+    public void pricingNextButonununTıklanması() {
+        sevkiPage.nextPricingButton.click();
+
+    }
+
+    @Then("Content Next butonunun tıklanması")
+    public void contentNextButonununTıklanması() {
+
+        sevkiPage.nextContentButton.click();
+        ReusableMethods.bekle(4);
+
+    }
+
+    @Then("FAQ baslıgı altındakibilgilerin olusturulması")
+    public void faqBaslıgıAltındakibilgilerinOlusturulması() {
+
+        sevkiPage.newFaqButton.click();
+        sevkiPage.faqTitleInput.sendKeys("Bahar ındirimleri ne zaman bitecek");
+        sevkiPage.faqAnswerTextarea.sendKeys("5 gün");
+        sevkiPage.saveFaqButton.click();
+        ReusableMethods.bekle(6);
+        sevkiPage.nextFaqButton.click();
+
+    }
+
+    @Then("Message to reviewer baslıgı altında mesaj gonderilebilmesi")
+    public void messageToReviewerBaslıgıAltındaMesajGonderilebilmesi() {
+
+        sevkiPage.messageForReviewerTextArea.sendKeys("İnceleme için gönderildi.");
+    }
+
+    @Then("I agree with terms & rules check box görunur ve aktif olması")
+    public void ıAgreeWithTermsRulesCheckBoxGörunurVeAktifOlması() {
+
+        Assertions.assertTrue(sevkiPage.termsSwitch.isEnabled());
+    }
+
+    @Then("I agree with terms & rules check box tıklanmsı")
+    public void ıAgreeWithTermsRulesCheckBoxTıklanmsı() {
+
+        sevkiPage.rulesSwitchLabel.click();
+        sevkiPage.saveMessageAsDraftButton.click();
+        ReusableMethods.bekle(6);
+    }
+
+    @Then("My Bundles linki görünür ve tıklanabilir olduğu doğrulanır")
+    public void myBundlesLinkiGörünürVeTıklanabilirOlduğuDoğrulanır() {
+
+        Assertions.assertTrue(sevkiPage.myBundlesButton.isEnabled());
+    }
 }
+
 
 
 
