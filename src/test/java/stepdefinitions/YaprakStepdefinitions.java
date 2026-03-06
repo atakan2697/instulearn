@@ -1,28 +1,34 @@
 package stepdefinitions;
 
 import io.cucumber.java.en.*;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
+import org.junit.jupiter.api.Assertions;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.Select;
 import pages.YaprakPage;
 import utilities.ConfigReader;
 import utilities.Driver;
+import org.openqa.selenium.JavascriptExecutor;
 import utilities.ReusableMethods;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.time.Duration;
-import java.util.List;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import java.util.List;
+import io.cucumber.datatable.DataTable;
+import com.github.javafaker.Faker;
+import org.openqa.selenium.Keys;
 import static utilities.Driver.driver;
 
+
 public class YaprakStepdefinitions {
-    YaprakPage yaprakPage = new YaprakPage();
-    WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
-    Actions action = new Actions(Driver.getDriver());
-    JavascriptExecutor js = (JavascriptExecutor) Driver.getDriver();
+
+YaprakPage yaprakPage = new YaprakPage();
+WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
+Actions action = new Actions(Driver.getDriver());
+JavascriptExecutor js = (JavascriptExecutor) Driver.getDriver();
+Faker faker = new Faker();
 
 //-----------------------------------------------------------------------------------------------------US15
     @When("Kullanici organizations bolumune scroll yapar")
@@ -69,7 +75,6 @@ public class YaprakStepdefinitions {
 
 
     }
-
 
 //-----------------------------------------------------------------------------------------------------US43
     //US_043_01
@@ -208,12 +213,303 @@ public class YaprakStepdefinitions {
 
     }
 
-
-
 //-----------------------------------------------------------------------------------------------------US45
 
 
+    // @Us_45_TC01
+    @When("Kullanici financialMenu tiklar")
+    public void kullaniciFinancialMenuTiklar() {
+        yaprakPage.financialMenu.click();
+        ReusableMethods.bekle(2);
+    }
+    @And("Kullanici dashboard menusunde aşağı scroll yapar")
+    public void kullaniciDashboardMenusundeAşağıScrollYapar() {
+        js.executeScript("document.querySelector('#panel-sidebar-scroll .simplebar-content-wrapper').scrollBy(0,400);");
+    }
+    @Then("Alt Menu linklerin gorunur ve aktif oldugunu dogrular")
+    public void alt_menu_linklerin_gorunur_ve_aktif_oldugunu_dogrular(DataTable dataTable) {
 
+        List<String> menuList = dataTable.asList();
+
+        for (String eachMenu : menuList) {
+
+            WebElement element = null;
+
+            switch (eachMenu) {
+
+                case "Financial Summary":
+                    element = yaprakPage.financialSummaryMenu;
+                    break;
+
+                case "Sales report":
+                    element = yaprakPage.salesReportMenu;
+                    break;
+
+                case "Charge Account":
+                    element = yaprakPage.chargeAccountMenu;
+                    break;
+
+                case "Subscribe":
+                    element = yaprakPage.subscribeMenu;
+                    break;
+
+                case "Payout":
+                    element = yaprakPage.payoutMenu;
+                    break;
+            }
+
+            assertTrue(element.isDisplayed());
+            assertTrue(element.isEnabled());
+        }
+    }
+
+    // @Us_45_TC02
+    @Given("Kullanici sisteme register olur")
+    public void kullaniciSistemeRegisterOlur() {
+        yaprakPage.registerMenu.click();
+        js.executeScript("window.scrollBy(0,300)");
+        yaprakPage.registerStudent.click();
+        yaprakPage.registeremail.click();
+        yaprakPage.registeremail.clear();
+        yaprakPage.registeremail.sendKeys(faker.internet().emailAddress());
+        yaprakPage.registerFullname.click();
+        yaprakPage.registerFullname.clear();
+        yaprakPage.registerFullname.sendKeys(faker.name().fullName());
+        yaprakPage.registerPassword.click();
+        yaprakPage.registerPassword.clear();
+        yaprakPage.registerPassword.sendKeys(ConfigReader.getProperty("gecerliPassword"));
+        yaprakPage.registerConfirmpassword.click();
+        yaprakPage.registerConfirmpassword.clear();
+        yaprakPage.registerConfirmpassword.sendKeys(ConfigReader.getProperty("gecerliPassword"));
+        js.executeScript("arguments[0].click();", yaprakPage.registerIAgreeButon);
+        ReusableMethods.bekle(1);
+        yaprakPage.registerSignUpButon.click();
+        ReusableMethods.bekle(3);
+        yaprakPage.userEnter.click();
+        ReusableMethods.bekle(2);
+
+    }
+    @Then("Kullanici Payout menusune tiklar")
+    public void kullaniciPayoutMenusuneTiklar() {
+
+        yaprakPage.payoutMenu.click();
+    }
+    @And("Kullanici yönlendirme uyarısını onaylar")
+    public void kullanici_yonlendirme_uyarisini_onaylar() {
+        // Ekranda çıkan payout settings linkine/uyarısına tıklar
+        yaprakPage.payoutYonlendirmeSetting.click();
+        ReusableMethods.bekle(2);
+    }
+    @Then("Hesap Isim IBAN doldurur")
+    public void isim_ve_iban_doldurur() {
+        Select select = new Select(yaprakPage.bankSelect);
+        select.selectByVisibleText("Stripe");
+        yaprakPage.bankSelect.sendKeys(Keys.TAB);
+        ReusableMethods.bekle(1);
+        yaprakPage.accountHolder.sendKeys(faker.name().fullName());
+
+        yaprakPage.bankSelect.sendKeys(Keys.TAB);
+        yaprakPage.accountID.sendKeys(faker.finance().iban());
+
+        ReusableMethods.bekle(1);
+    }
+    @And("Kullanici {string} tıklayarak bir payout hesabı oluşturur.")
+    public void kullanici_tiklayarak_bir_payout_hesabi_olusturur(String butonAdi) {
+        yaprakPage.savePayoutAccount.click();
+        ReusableMethods.bekle(5);
+
+    }
+    @Then("Yeni hesabın açıldığını doğrular")
+    public void yeni_hesabin_acildigini_dogrular() {
+        yaprakPage.dashboardAltMenu.click();
+        ReusableMethods.bekle(1);
+        js.executeScript("document.querySelector('#panel-sidebar-scroll .simplebar-content-wrapper').scrollBy(0,200);");
+        yaprakPage.financialMenu.click();
+        ;
+        ReusableMethods.bekle(1);
+        yaprakPage.payoutMenu.click();
+        ReusableMethods.bekle(1);
+        assertFalse(
+                yaprakPage.payoutYonlendirmeSetting.isDisplayed(),
+                "HATA: Hesap olusturuldu mesajı çıkmasına ragmen, " +
+                        "payout sayfasında settings hesap açılış uyarisi hala gorunuyor. " +
+                        "Hesap açılmadı!!");
+    }
+
+    // @Us_45_TC03
+    @And("Kullanici Payout request talebi oluşturur")
+    public void kullanici_payout_request_talebi_olusturur() {
+        ReusableMethods.bekle(2);
+        yaprakPage.requestPayout.click();
+        ReusableMethods.bekle(1);
+        js.executeScript(
+                "document.querySelector('button.js-submit-payout').click();"
+        );
+        js.executeScript(
+                "document.querySelector(\"button[class*='close-swl']\").click();"
+        );
+        ReusableMethods.bekle(2);
+        js.executeScript("window.scrollBy(0,200)");
+        ReusableMethods.bekle(2);
+
+    }
+    @Then("Payout request işleminin onaylandığını doğrular")
+    public void payoutRequestIşlemininOnaylandığınıDoğrular() {
+        ReusableMethods.bekle(3);
+        yaprakPage.requestPayout.click();
+        ReusableMethods.bekle(4);
+        String status = yaprakPage.requestPayoutStatu.getText();
+        if (status.equalsIgnoreCase("Waiting")) {
+
+        }
+        assertFalse(
+                status.equalsIgnoreCase("Waiting"),
+                "Bug: Payout request 'Waiting' durumunda kaldı."
+        );
+
+    }
+
+    // @Us_45_TC04
+    @And("Kullanci setting menusunden identity & financial menusune gelip")
+    public void kullanciSettingMenusundenIdentityFinancialMenusuneGelip() {
+        ReusableMethods.bekle(2);
+        yaprakPage.settingsMenu.click();
+        ReusableMethods.bekle(2);
+        yaprakPage.identityFinancialStep.click();
+    }
+    @When("oluşturduğu Payout hesabını siler")
+    public void oluşturduğuPayoutHesabınıSiler() {
+        ReusableMethods.bekle(2);
+        yaprakPage.deleteAccountButton.click();
+        ReusableMethods.bekle(2);
+        ReusableMethods.scrollToElement(yaprakPage.payoutConfirmDeleteButton);
+        ReusableMethods.bekle(1);
+        yaprakPage.payoutConfirmDeleteButton.click();
+    }
+    @Then("Hesabin silindigini doğrular")
+    public void hesabinSilindiginiDoğrular() {
+        ReusableMethods.bekle(2);
+        ReusableMethods.scrollToElement(yaprakPage.deleteAccoutnSuccessPopupTitle);
+        ReusableMethods.bekle(1);
+        yaprakPage.deleteAccoutnSuccessPopupTitle.isDisplayed();
+        Driver.getDriver().navigate().refresh();
+        js.executeScript("window.scrollBy(0,-250)");
+        ReusableMethods.bekle(2);
+        boolean identityStillApproved = false;
+        try {
+            js.executeScript("window.scrollBy(0,-250)");
+            identityStillApproved = yaprakPage.identityApprovedMessage.isDisplayed();
+        } catch (Exception ignored) {
+            identityStillApproved = false;
+        }
+        if (identityStillApproved) {
+            ReusableMethods.tarihliTumSayfaResimCek(Driver.getDriver(), "DELETE_FAILED_IDENTITY_APPROVED");
+        }
+        assertFalse(
+                identityStillApproved,
+                "Bug: Hesap silinemedi! 'Your identity & financial information approved…' mesajı hâlâ duruyor."
+        );
+    }
+
+    // @Us_45_TC05
+    @Given("Kullanici Charge Account sayfasina gider")
+    public void kullanici_charge_account_sayfasina_gider() {
+        yaprakPage.ChargeAccount.click();
+        ReusableMethods.bekle(2);
+
+
+    }
+    @When("Kullanici Stripe ödeme yöntemini seçer ve tutarı {string} girer")
+    public void kullanici_stripe_odeme_yontemini_secer_ve_tutari_girer(String tutar) {
+        yaprakPage.chargestripePaymentLabel.click();
+        Actions actions = new Actions(Driver.getDriver());
+        actions.sendKeys(Keys.PAGE_DOWN).perform();
+        yaprakPage.chargeamountInput.sendKeys(tutar);
+        ReusableMethods.bekle(1);
+        yaprakPage.chargepayButton.click();
+    }
+    @And("Kullanici ödeme bilgilerini girer")
+    public void kullanici_odeme_bilgilerini_girer() throws InterruptedException {
+        Actions actions = new Actions(driver);
+
+        ReusableMethods.bekle(3);
+        yaprakPage.cardNumberInput.sendKeys("4242424242424242");
+        actions.sendKeys(Keys.TAB).perform();
+        yaprakPage.cardExpiryInput.sendKeys("0230");
+        actions.sendKeys(Keys.TAB).perform();
+        yaprakPage.cardCvcInput.sendKeys("112");
+        actions.sendKeys(Keys.TAB).perform();
+        yaprakPage.cardHolderNameInput.sendKeys("yaprak ersan");
+        actions.sendKeys(Keys.TAB).perform();
+        actions.sendKeys(Keys.TAB).perform();
+        yaprakPage.paymentSpinner.click();
+        actions.sendKeys(Keys.TAB).perform();
+        ReusableMethods.bekle(4);
+        wait.until(ExpectedConditions.elementToBeClickable(yaprakPage.chargeemailInput))
+                .sendKeys("yaprak.user@instulearn.com");
+        ReusableMethods.bekle(6);
+        String code = "000000";
+        for (int i = 0; i < yaprakPage.smsCodeInputs.size(); i++) {
+            yaprakPage.smsCodeInputs.get(i)
+                    .sendKeys(String.valueOf(code.charAt(i)));
+        }
+
+        ReusableMethods.bekle(3);
+
+
+    }
+    @And("Ödeme işlemini onaylar")
+    public void odeme_islemini_onaylar() {
+        yaprakPage.submitSpinner.click();
+
+        ReusableMethods.bekle(3);
+        ReusableMethods.bekle(5);
+
+    }
+    @Then("Doğrulama mesajı görüntülenmelidir")
+    public void dogrulama_mesaji_goruntulenmelidir() {
+        ReusableMethods.bekle(3);
+        assertTrue(
+                yaprakPage.congratulationsText.isDisplayed(),
+                "Başarı mesajı görülmedi!"
+        );
+        yaprakPage.chargeAccountMyPanel.click();
+        ReusableMethods.bekle(5);
+
+    }
+    @Then("Kullanici Subscribe menusune tiklar")
+    public void kullaniciSubscribeMenusuneTiklar() {
+        yaprakPage.subscribeMenu.click();
+        js.executeScript("window.scrollBy(0,250)");
+    }
+    @Then("Kullanici mevcut planınnın görüntüler")
+    public void mevcut_plani_goruntule() {
+
+        wait.until(ExpectedConditions.visibilityOf(yaprakPage.activePlanText));
+
+        String activePlan = yaprakPage.activePlanText.getText();
+
+        System.out.println("Aktif Plan: " + activePlan);
+
+        Assertions.assertFalse(activePlan.isEmpty(), "Plan bilgisi boş!");
+    }
+    @When("Kullanici mevcut planından farklı bir plan seçer ve ödemeyi tamamlar")
+    public void planSecVeOdemeYap() {
+        js.executeScript("window.scrollBy(0,200)");
+        yaprakPage.goldPurchaseButton.click();
+        ReusableMethods.bekle(2);
+
+        assertFalse(
+                yaprakPage.goldPurchaseButton.isDisplayed(),
+                "Bug: Subscribes Plan seçim butonu aktif değil, test failed"
+        );
+    }
+    @Then("Yeni üyelik planının aktif olduğunu doğrular")
+    public void yeniÜyelikPlanınınAktifOlduğunuDoğrular() {
+        wait.until(ExpectedConditions.visibilityOf(yaprakPage.activePlanText));
+        String activePlan = yaprakPage.activePlanText.getText();
+        System.out.println("Yeni Aktif Plan: " + activePlan);
+    }
 
 
 
