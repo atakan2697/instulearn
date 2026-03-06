@@ -81,6 +81,109 @@ public class ArdaStepdefinitions {
         var reserveLink = ardaPage.reserveMeetingCardImg.findElement(org.openqa.selenium.By.xpath("./parent::a"));
         Assertions.assertTrue(reserveLink.isEnabled(),
                 "Reserve a meeting karti tiklanabilir degil!");
+
+    }@Then("Store linkinin gorunur oldugunu dogrular")
+    public void store_linkinin_gorunur_oldugunu_dogrular() {
+
+        Assertions.assertTrue(ardaPage.storeLink.isDisplayed(),
+                "Store linki gorunmuyor!");
+
+        Assertions.assertTrue(ardaPage.storeLink.isEnabled(),
+                "Store linki tiklanabilir degil!");
+    }
+
+    @When("Store linkine tiklar")
+    public void store_linkine_tiklar() {
+
+        ardaPage.storeLink.click();
+        ReusableMethods.bekle(2);
+    }
+
+    @Then("Products sayfasinin acildigini dogrular")
+    public void products_sayfasinin_acildigini_dogrular() {
+
+        Assertions.assertTrue(ardaPage.productsTitle.isDisplayed(),
+                "Products sayfasi acilmadi!");
+    }@Then("Search textbox ve Search butonunun gorunur ve aktif oldugunu dogrular")
+    public void search_textbox_ve_search_butonunun_gorunur_ve_aktif_oldugunu_dogrular() {
+
+        Assertions.assertTrue(ardaPage.searchTextbox.isDisplayed());
+        Assertions.assertTrue(ardaPage.searchTextbox.isEnabled());
+
+        Assertions.assertTrue(ardaPage.searchButton.isDisplayed());
+        Assertions.assertTrue(ardaPage.searchButton.isEnabled());
+    }
+
+
+    @Then("Filtreleme bolumunun gorunur oldugunu dogrular")
+    public void filtreleme_bolumunun_gorunur_oldugunu_dogrular() {
+
+        JavascriptExecutor js = (JavascriptExecutor) Driver.getDriver();
+
+        js.executeScript("arguments[0].scrollIntoView(true);", ardaPage.filterItemsButton);
+        ReusableMethods.bekle(1);
+
+        Assertions.assertTrue(ardaPage.filterItemsButton.isDisplayed());
+    }
+
+
+    @When("Urun secmeden filtreleme uygular")
+    public void urun_secmeden_filtreleme_uygular() {
+
+        ardaPage.filterItemsButton.click();
+        ReusableMethods.bekle(2);
+    }
+
+
+    @Then("Filtreleme sonrasi urun listesinin guncellendigini dogrular")
+    public void filtreleme_sonrasi_urun_listesinin_guncellendigini_dogrular() {
+
+        Assertions.assertFalse(ardaPage.productCards.isEmpty());
+    }@When("Products sayfasinda listelenen urunlerden biri secilir")
+    public void products_sayfasinda_listelenen_urunlerden_biri_secilir() {
+
+        ReusableMethods.bekle(2);
+        ardaPage.productTitleFromList.click();
+    }
+
+    @Then("Secilen urune ait fiyat bilgisinin gorunur oldugu kontrol edilir")
+    public void secilen_urune_ait_fiyat_bilgisinin_gorunur_oldugu_kontrol_edilir() {
+
+        Assertions.assertTrue(ardaPage.productPrice.isDisplayed());
+    }
+
+    @Then("Satici bilgisinin gorunur oldugu kontrol edilir")
+    public void satici_bilgisinin_gorunur_oldugu_kontrol_edilir() {
+
+        Assertions.assertTrue(ardaPage.sellerTab.isDisplayed());
+    }
+
+    @Then("Urun adi ve description bilgilerinin goruntulendigi dogrulanir")
+    public void urun_adi_ve_description_bilgilerinin_goruntulendigi_dogrulanir() {
+
+        ((JavascriptExecutor) Driver.getDriver())
+                .executeScript("window.scrollBy(0,400)");
+
+        ReusableMethods.bekle(1);
+
+        Assertions.assertTrue(ardaPage.productDescription.isDisplayed());
+    }
+
+    @Then("Urun detay sayfasinda puanlama rating alaninin gorunur oldugu dogrulanir")
+    public void urun_detay_sayfasinda_puanlama_rating_alaninin_gorunur_oldugu_dogrulanir() {
+
+        Assertions.assertTrue(ardaPage.ratingArea.isDisplayed());
+    }
+
+    @Then("Urunle ilgili yorum yapilabilen alanin gorunur oldugu dogrulanir")
+    public void urunle_ilgili_yorum_yapilabilen_alanin_gorunur_oldugu_dogrulanir() {
+
+        ((JavascriptExecutor) Driver.getDriver())
+                .executeScript("arguments[0].scrollIntoView(true);", ardaPage.commentBox);
+
+        ReusableMethods.bekle(1);
+
+        Assertions.assertTrue(ardaPage.commentBox.isDisplayed());
     }
 
 }
