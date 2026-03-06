@@ -1,12 +1,11 @@
 package stepdefinitions;
 
-import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
+import io.cucumber.java.en.*;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.interactions.WheelInput;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.NihanPage;
@@ -23,7 +22,7 @@ public class NihanStepDefinitions {
     //---------------------------------------------------------------------------------------------------------
 
 
-    NihanPage RegisterPage = new NihanPage();
+     NihanPage RegisterPage = new NihanPage();
 
     @Given("kullanici_InstuLern_anasayfaya_gider")
     public void kullanici_InstuLern_anasayfaya_gider() {
@@ -345,7 +344,7 @@ public class NihanStepDefinitions {
 
         System.out.println(RegisterPage.categoryCheckboxes);
         // Checkbox listesi boş mu?
-        //Assertions.assertTrue(MeetingPage.categoryCheckboxes.size() > 0);
+        //Assertions.assertTrue(RegisterPage.categoryCheckboxes.size() > 0);
 
         // Tüm checkboxlar görünür mü?
         for (WebElement checkbox : RegisterPage.categoryCheckboxes) {
@@ -363,6 +362,7 @@ public class NihanStepDefinitions {
 
     @When("Kullanıcı {string} adindaki kategoriyi seçer")
     public void kullanici_adindaki_kategoriyi_secer(String categoryName) {
+
 
         RegisterPage.selectCategory(categoryName);
 
@@ -384,7 +384,7 @@ public class NihanStepDefinitions {
     @Then("Instructor fiyat bilgisi görünür olmalı")
     public void instructor_fiyat_bilgisi_gorunur_olmali() {
 
-//        for (WebElement price : MeetingPage.instructorPrices) {
+//        for (WebElement price : RegisterPage.instructorPrices) {
 //            Assertions.assertTrue(price.isDisplayed(), "Instructor fiyat bilgisi görünmüyor: " + price.getText());
 //        }
 
@@ -486,7 +486,7 @@ public class NihanStepDefinitions {
     @When("Kullanici odeme turu olarak stripe secer")
     public void kullanici_odeme_turu_olarak_secer() {
 
-        // ReusableMethods.scrollToElement(MeetingPage.stripePaymentOption);
+        // ReusableMethods.scrollToElement(RegisterPage.stripePaymentOption);
 
         WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
         wait.until(ExpectedConditions.elementToBeClickable(RegisterPage.stripePaymentOption)).click();
@@ -527,11 +527,17 @@ public class NihanStepDefinitions {
     @Then("Congratulations mesajı görüntülenmeli")
     public void congratulations_mesaji_goruntulenmeli() {
 
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(20));
+        wait.until(ExpectedConditions.visibilityOf(RegisterPage.congratulationsTitle));
+
         Assertions.assertTrue(RegisterPage.congratulationsTitle.isDisplayed());
     }
 
     @Then("My Panel butonu görünür olmalı")
     public void my_panel_butonu_gorunur_olmali() {
+
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(20));
+        wait.until(ExpectedConditions.visibilityOf(RegisterPage.myPanelButton));
 
         Assertions.assertTrue(RegisterPage.myPanelButton.isDisplayed());
     }
@@ -539,21 +545,199 @@ public class NihanStepDefinitions {
     @And("My Panel butonu tıklanabilir olmalı")
     public void my_panel_butonu_tiklanabilir_olmali() {
 
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(20));
+        wait.until(ExpectedConditions.visibilityOf(RegisterPage.myPanelButton));
+
         Assertions.assertTrue(RegisterPage.myPanelButton.isEnabled());
     }
 
     @And("My panel butonuna tiklayinca Events sayfasina gectigi dogrulanir")
     public void my_panel_butonuna_tiklayinca_events_sayfasina_gectigi_dogrulanir() {
 
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(20));
+        wait.until(ExpectedConditions.elementToBeClickable(RegisterPage.myPanelButton));
 
         RegisterPage.myPanelButton.click();
 
+        wait.until(ExpectedConditions.visibilityOf(RegisterPage.eventsPageTitle));
 
         Assertions.assertTrue(RegisterPage.eventsPageTitle.isDisplayed());
 
         Assertions.assertTrue(Driver.getDriver().getCurrentUrl().contains("/panel"));
     }
 
+    //---------------------------------------------------------------------------------------------------------
+    //----------------- US_038_LogoutFunctionalityStepDefinitions----------------------------------------
+    //---------------------------------------------------------------------------------------------------------
+
+
+    @When("Kullanıcı header bölümündeki kullanıcı adına tıklar")
+    public void kullanici_header_kullanici_adina_tiklar() {
+
+        RegisterPage.hoverUserDropdown();
+
+    }
+
+
+
+    @And("Kullanici sol side barda {string} gorunene kadar sayfayi asagi surukler")
+    public void kullanici_sol_side_barda_gorunene_kadar_sayfayi_asagi_surukler(String buton) {
+
+
+        RegisterPage.scrollSidebarUntilElementVisible(buton);
+
+
+    }
+
+    @And("Dashboard sayfasında {string} linki görünür olmalı")
+    public void dashboard_sayfasında_linki_görünür_olmalı(String linkText) {
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
+
+        WebElement link = wait.until(ExpectedConditions.elementToBeClickable(
+                RegisterPage.getSidebarLink(linkText)
+        ));
+
+        Assertions.assertTrue(RegisterPage.getSidebarLink(linkText).isDisplayed());
+
+
+    }
+
+    @And("Dashboard sayfasında {string} linki tıklanabilir olmalı")
+    public void dashboard_sayfasında_linki_tıklanabilir_olmalı(String linkText) {
+
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
+
+        WebElement link = wait.until(ExpectedConditions.elementToBeClickable(
+                RegisterPage.getSidebarLink(linkText)
+        ));
+        Assertions.assertTrue(RegisterPage.getSidebarLink(linkText).isEnabled());
+
+    }
+    @And("Dashboard sayfasında Logout linki görünür olmalı")
+    public void dashboard_sayfasında_Logout_linki_görünür_olmalı() {
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
+
+        WebElement link = wait.until(ExpectedConditions.elementToBeClickable(
+                RegisterPage.logoutLink
+        ));
+
+        Assertions.assertTrue(RegisterPage.logoutLink.isDisplayed());
+
+
+    }
+
+    @And("Dashboard sayfasında Logout linki tıklanabilir olmalı")
+    public void dashboard_sayfasında_Logout_linki_tıklanabilir_olmalı() {
+
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
+
+        WebElement link = wait.until(ExpectedConditions.elementToBeClickable(
+                RegisterPage.logoutLink
+        ));
+        Assertions.assertTrue(RegisterPage.logoutLink.isEnabled());
+
+    }
+
+    @And("Kullanici sol side barda Logout gorunene kadar sayfayi asagi surukler")
+    public void kullanici_sol_side_barda_logout_gorunene_kadar_sayfayi_asagi_surukler() {
+
+         RegisterPage.scrollToLogout();
+
+
+    }
+
+    @When("Kullanıcı Dashboard sayfasındaki {string} linkine tıklar")
+    public void kullanıcı_dashboard_sayfasındaki_linkine_tıklar(String linkText) {
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
+
+        wait.until(ExpectedConditions.elementToBeClickable(
+                RegisterPage.getSidebarLink(linkText)));
+
+        RegisterPage.getSidebarLink(linkText).click();
+    }
+    @When("Kullanıcı Dashboard sayfasındaki Logout linkine tıklar")
+    public void kullanıcı_dashboard_sayfasındaki_logout_linkine_tıklar() {
+
+        Actions actions = new Actions(Driver.getDriver());
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
+
+        WebElement sidebar = wait.until(ExpectedConditions.visibilityOf(RegisterPage.sidebar));
+        WebElement logout = RegisterPage.logoutLink;
+
+        // Mouse sidebar üzerine gelsin
+        actions.moveToElement(sidebar).perform();
+
+        int maxScroll = 20;
+
+        for (int i = 0; i < maxScroll; i++) {
+
+            try {
+                if (logout.isDisplayed()) {
+                    break;
+                }
+            } catch (Exception e) {}
+
+            // Küçük scroll
+            actions.scrollFromOrigin(
+                    WheelInput.ScrollOrigin.fromElement(sidebar),
+                    0,
+                    120
+            ).perform();
+
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {}
+        }
+
+        wait.until(ExpectedConditions.elementToBeClickable(logout)).click();
+    }
+
+    @And("Kullanıcı sistemden başarıyla çıkış yapabilmeli")
+    public void kullanıcı_sistemden_başarıyla_çıkış_yapabilmeli() {
+
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
+
+        wait.until(ExpectedConditions.visibilityOf(RegisterPage.loginButton));
+
+        Assertions.assertTrue(RegisterPage.loginButton.isDisplayed());
+    }
+
+
+
+
+    @Given("Kullanici Header bolumundeki {string} linkine tiklar")
+    public void kullanici_header_bolumundeki_linkine_tiklar(String linkText) {
+
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
+
+        wait.until(ExpectedConditions.visibilityOf(RegisterPage.getHeaderLink(linkText)));
+        RegisterPage.getHeaderLink(linkText).click();
+    }
+
+
+
+    @Then("Dropdown içinde {string} linki görünür olmalı")
+    public void dropdown_icinde_linki_gorunur_olmali(String linkText) {
+
+        Assertions.assertTrue(RegisterPage.getDropdownLink(linkText).isDisplayed());
+
+    }
+
+    @Then("Dropdown içinde {string} linki tiklanabilir olmalı")
+    public void dropdown_icinde_linki_tiklanabilir_olmali(String linkText) {
+
+        Assertions.assertTrue(RegisterPage.getDropdownLink(linkText).isEnabled());
+
+    }
+
+    @When("Kullanıcı Dropdown icindeki {string} linkine tıklar")
+    public void kullanici_dropdown_icindeki_linkine_tiklar(String linkText) {
+
+
+        RegisterPage.hoverUserDropdown(); // dropdown açılır
+
+        RegisterPage.getDropdownLink(linkText).click(); // Logout
+    }
 
 
 }

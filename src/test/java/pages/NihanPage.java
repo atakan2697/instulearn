@@ -1,7 +1,7 @@
 package pages;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -289,8 +289,6 @@ public class NihanPage {
     @FindBy(xpath = "//a[contains(@href,'/profile?tab=appointments') and contains(@class,'btn-primary')]")
     public List<WebElement> reserveMeetingButtons;
 
-    @FindBy(id = "plotId")
-    public WebElement calendarArea;
 
 
     // İlk instructor için ilk saat aralığı label
@@ -349,15 +347,12 @@ public class NihanPage {
     public WebElement congratulationsTitle;
 
     //My Panel Butonu
-    @FindBy(xpath = "//a[@href='/panel']")
+    @FindBy(linkText = "My Panel")
     public WebElement myPanelButton;
 
     @FindBy(xpath = "//h1[text()='Events']")
     public WebElement eventsPageTitle;
 
-//    public void verifyEventsPageOpened() {
-//        Assertions.assertTrue(eventsPageTitle.isDisplayed());
-//    }
 
 
 
@@ -384,8 +379,12 @@ public class NihanPage {
     }
 
     public void selectCategory(String categoryName) {
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(15));
+       ;
+
         WebElement category =
-                Driver.getDriver().findElement(By.xpath("//label[normalize-space()='" + categoryName + "']"));
+                wait.until(
+                        ExpectedConditions.elementToBeClickable(By.xpath("//label[normalize-space()='" + categoryName + "']")));
         category.click();
     }
 
@@ -476,4 +475,203 @@ public class NihanPage {
 
     }
 
+
+
+    // -----------------------------
+    // Home Page Alanları
+    // -----------------------------
+
+    @FindBy(css = "a[href='/logout']")
+    public WebElement sidebarLogoutLink;
+
+    @FindBy(linkText = "Home")
+    public WebElement homeIcon;
+
+    @FindBy(xpath = "//span[contains(@class,'user-name')]")
+    public WebElement userName;
+
+    @FindBy(id = "panelSidebar")
+    public WebElement sidebar;
+
+    @FindBy(xpath = "//a[normalize-space(span[text()='Log out'])]")
+    public WebElement logoutLink;
+    // Sidebar container
+    @FindBy(id = "panelSidebar")
+    public WebElement sidebarContainer;
+
+    // Örnek olarak Noticeboard element
+    @FindBy(xpath = "//span[text()='Noticeboard']")
+    public WebElement noticeboardItem;
+
+
+    // -----------------------------
+    // Yardımcı Metotlar
+    // -----------------------------
+
+
+
+//    public static void verifyLinkVisible(String linkText) {
+//
+//        WebElement link = Driver.getDriver()
+//                .findElement(By.xpath("//a[contains(text(),'" + linkText + "')]"));
+//
+//        Assertions.assertTrue(link.isDisplayed());
+//    }
+
+    public WebElement getSidebarLink(String linkText) {
+
+        return Driver.getDriver().findElement(
+                By.xpath("//div[@id='panelSidebar']//span[normalize-space()='" + linkText + "']")
+        );
+    }
+
+    public WebElement getHeaderLink(String linkText){
+
+
+        return Driver.getDriver()
+                .findElement(By.xpath("//a[normalize-space()='" + linkText + "']"));
+
+    }
+
+    public WebElement getDropdownLink(String linkText){
+
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(5));
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[contains(@class,'custom-dropdown-body')]//a[.//span[text()='" + linkText + "']]")
+        ));
+
+    }
+
+    public void hoverUserDropdown(){
+        Actions actions = new Actions(Driver.getDriver());
+        actions.moveToElement(userName).perform();
+    }
+
+
+
+
+
+
+
+
+
+
+    public By sidebarLocator = By.id("panelSidebar");
+
+
+
+
+    public WebElement getSidebarElementByName(String name) {
+        return Driver.getDriver().findElement(By.xpath("//a[contains(text(),'" + name + "') and contains(@href,'logout')]"));
+    }
+
+    public void scrollSidebarUntilElementVisible(String elementName) {
+
+        WebElement sidebar = Driver.getDriver().findElement(sidebarLocator);
+        Actions actions = new Actions(Driver.getDriver());
+
+        int attempts = 0;
+        while (attempts < 30) { // max 30 deneme
+            try {
+                WebElement target = getSidebarElementByName(elementName);
+                if (target.isDisplayed()) {
+                    break; // görünüyorsa dur
+                }
+            } catch (Exception e) {
+                // element henüz görünmüyorsa scroll devam eder
+            }
+
+            // Fareyi sidebar üstüne götür
+            actions.moveToElement(noticeboardItem).perform();
+
+            // Fareyi biraz aşağı sürükle (offset 0, 50 px)
+            actions.moveByOffset(0, 50).perform();
+
+            try { Thread.sleep(200); } catch (InterruptedException ignored) {}
+            attempts++;
+        }
+    }
+
+//    public void scrollToLogout() {
+//        Actions actions = new Actions(Driver.getDriver());
+//
+//
+//        actions.moveToElement(noticeboardItem).perform();
+//        int attempts = 0;
+//        while (attempts < 100) { // max 100 deneme
+//            try {
+//                if (logoutLink.isDisplayed()) {
+//                    break; // Logout görünüyorsa dur
+//                }
+//            } catch (Exception e) {
+//                // Logout henüz görünmüyorsa scroll devam eder
+//            }
+//
+//            // Fareyi sidebar üzerine götür
+//            actions.moveToElement(sidebarContainer).perform();
+//
+//            // Fareyi aşağı kaydır (Logout görünene kadar)
+//            actions.moveByOffset(0, 50).perform();
+//
+//            try { Thread.sleep(150); } catch (InterruptedException ignored) {}
+//            attempts++;
+//        }
+//    }
+
+
+
+
+    /**
+     * Sidebar üstüne fareyi getirir ve logout görünene kadar scroll yapar.
+     */
+    public void scrollToLogout() {
+        Actions actions = new Actions(Driver.getDriver());
+
+        // Sidebar üzerine fareyi getir
+        actions.moveToElement(sidebar).perform();
+
+        // Logout görünene kadar scroll ve stale element retry
+        int maxAttempts = 5;
+        int attempts = 0;
+
+        while(attempts < maxAttempts) {
+            try {
+                if(logoutLink.isDisplayed()) {
+                    // Görünüyorsa dur
+                    break;
+                } else {
+                    // Görünmüyorsa JS ile biraz kaydır
+                    ((JavascriptExecutor) Driver.getDriver()).executeScript("arguments[0].scrollIntoView({behavior:'smooth', block:'center'});", logoutLink);
+                }
+            } catch(StaleElementReferenceException e) {
+                // Element stale olduysa tekrar bul
+                PageFactory.initElements(Driver.getDriver(), this);
+            }
+            attempts++;
+        }
+    }
+
+    public boolean isLogoutVisible() {
+        try {
+            return logoutLink.isDisplayed();
+        } catch (StaleElementReferenceException e) {
+            PageFactory.initElements(Driver.getDriver(), this);
+            return logoutLink.isDisplayed();
+        }
+    }
+
+    public boolean isLogoutClickable() {
+        try {
+            return logoutLink.isEnabled();
+        } catch (StaleElementReferenceException e) {
+            PageFactory.initElements(Driver.getDriver(), this);
+            return logoutLink.isEnabled();
+        }
+    }
+
+
+
 }
+
+
+
