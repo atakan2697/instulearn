@@ -4,6 +4,7 @@ import io.cucumber.java.en.*;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.JavascriptExecutor;
 import pages.ArdaPage;
+import utilities.ConfigReader;
 import utilities.Driver;
 import utilities.ReusableMethods;
 
@@ -184,6 +185,221 @@ public class ArdaStepdefinitions {
         ReusableMethods.bekle(1);
 
         Assertions.assertTrue(ardaPage.commentBox.isDisplayed());
+    }@Given("kullanici anasayfaya gider")
+    public void kullanici_anasayfaya_gider() {
+        Driver.getDriver().get(ConfigReader.getProperty("instulearnUrl"));
+        ReusableMethods.bekle(2);
     }
 
+    @When("arda valid bilgilerle login olur")
+    public void arda_valid_bilgilerle_login_olur() {
+        ardaPage.loginLink.click();
+        ReusableMethods.bekle(2);
+
+        ReusableMethods.scrollToElement(ardaPage.loginEmailInput);
+        ReusableMethods.bekle(1);
+
+        ardaPage.loginEmailInput.click();
+        ardaPage.loginEmailInput.clear();
+        ardaPage.loginEmailInput.sendKeys("ardaemre.user@instulearn.com");
+
+        ardaPage.loginPasswordInput.click();
+        ardaPage.loginPasswordInput.clear();
+        ardaPage.loginPasswordInput.sendKeys(ConfigReader.getProperty("gecerliPassword"));
+
+        ReusableMethods.bekle(1);
+        ardaPage.loginButton.click();
+        ReusableMethods.bekle(3);
+    }
+
+    @And("kullanici Store linkine tiklar")
+    public void kullanici_store_linkine_tiklar() {
+        ReusableMethods.scrollToElement(ardaPage.storeLink);
+        ReusableMethods.bekle(1);
+        ardaPage.storeLink.click();
+        ReusableMethods.bekle(2);
+
+        Assertions.assertTrue(ardaPage.productsTitle.isDisplayed());
+    }
+
+    @And("kullanici ilk urune tiklar")
+    public void kullanici_ilk_urune_tiklar() {
+        ReusableMethods.scrollToElement(ardaPage.firstProduct);
+        ReusableMethods.bekle(1);
+        ardaPage.firstProduct.click();
+        ReusableMethods.bekle(3);
+
+        Assertions.assertTrue(ardaPage.buyNowButton.isDisplayed());
+    }
+
+    @And("kullanici Buy Now butonuna tiklar")
+    public void kullanici_buy_now_butonuna_tiklar() {
+        ReusableMethods.scrollToElement(ardaPage.buyNowButton);
+        ReusableMethods.bekle(2);
+
+        JavascriptExecutor js = (JavascriptExecutor) Driver.getDriver();
+        js.executeScript("arguments[0].scrollIntoView({block:'center'});", ardaPage.buyNowButton);
+        ReusableMethods.bekle(1);
+        js.executeScript("arguments[0].click();", ardaPage.buyNowButton);
+
+        ReusableMethods.bekle(3);
+    }
+
+    @And("kullanici Checkout butonuna tiklar")
+    public void kullanici_checkout_butonuna_tiklar() {
+        ReusableMethods.scrollToElement(ardaPage.checkoutButton);
+        ReusableMethods.bekle(2);
+
+        JavascriptExecutor js = (JavascriptExecutor) Driver.getDriver();
+        js.executeScript("arguments[0].scrollIntoView({block:'center'});", ardaPage.checkoutButton);
+        ReusableMethods.bekle(1);
+        js.executeScript("arguments[0].click();", ardaPage.checkoutButton);
+
+        ReusableMethods.bekle(3);
+    }
+
+    @And("kullanici Stripe odeme yontemini secer")
+    public void kullanici_stripe_odeme_yontemini_secer() {
+        ReusableMethods.scrollToElement(ardaPage.stripeLabelCard);
+        ReusableMethods.bekle(2);
+
+        JavascriptExecutor js = (JavascriptExecutor) Driver.getDriver();
+        js.executeScript("arguments[0].scrollIntoView({block:'center'});", ardaPage.stripeLabelCard);
+        ReusableMethods.bekle(1);
+        js.executeScript("arguments[0].click();", ardaPage.stripeLabelCard);
+
+        ReusableMethods.bekle(2);
+    }
+
+    @Then("kullanici Start Payment butonunu goruntuleyebilmelidir")
+    public void kullanici_start_payment_butonunu_goruntuleyebilmelidir() {
+        Assertions.assertTrue(ardaPage.startPaymentButton.isDisplayed());
+
+
+        JavascriptExecutor js = (JavascriptExecutor) Driver.getDriver();
+        js.executeScript("arguments[0].scrollIntoView({block:'center'});", ardaPage.stripeLabelCard);
+        ReusableMethods.bekle(1);
+        js.executeScript("arguments[0].click();", ardaPage.stripeLabelCard);
+
+        ReusableMethods.bekle(2);
+    }
+
+    @And("kullanici Start Payment butonuna tiklar")
+    public void kullanici_start_payment_butonuna_tiklar() {
+        ReusableMethods.scrollToElement(ardaPage.startPaymentButton);
+        ReusableMethods.bekle(2);
+
+        JavascriptExecutor js = (JavascriptExecutor) Driver.getDriver();
+        js.executeScript("arguments[0].scrollIntoView({block:'center'});", ardaPage.startPaymentButton);
+        ReusableMethods.bekle(1);
+        js.executeScript("arguments[0].click();", ardaPage.startPaymentButton);
+
+        ReusableMethods.bekle(4);
+    }
+
+
+
+    @And("kullanici stripe odeme bilgilerini doldurur")
+    public void kullanici_stripe_odeme_bilgilerini_doldurur() {
+        ReusableMethods.bekle(3);
+
+        ardaPage.stripeEmailInput.click();
+        ardaPage.stripeEmailInput.sendKeys("ardaemretest@gmail.com");
+        ReusableMethods.bekle(1);
+
+        ardaPage.cardNumberInput.click();
+        ardaPage.cardNumberInput.sendKeys("4242424242424242");
+        ReusableMethods.bekle(1);
+
+        ardaPage.cardExpiryInput.click();
+        ardaPage.cardExpiryInput.sendKeys("1230");
+        ReusableMethods.bekle(1);
+
+        ardaPage.cardCvcInput.click();
+        ardaPage.cardCvcInput.sendKeys("123");
+        ReusableMethods.bekle(1);
+
+        ardaPage.cardHolderNameInput.click();
+        ardaPage.cardHolderNameInput.sendKeys("Arda Emre Demir");
+        ReusableMethods.bekle(1);
+
+        ReusableMethods.scrollToElement(ardaPage.saveInfoCheckbox);
+        ReusableMethods.bekle(1);
+
+        JavascriptExecutor js = (JavascriptExecutor) Driver.getDriver();
+        js.executeScript("arguments[0].click();", ardaPage.saveInfoCheckbox);
+        ReusableMethods.bekle(2);
+
+        ardaPage.phoneNumberInput.click();
+        ardaPage.phoneNumberInput.sendKeys("05555555555");
+        ReusableMethods.bekle(2);
+    }
+
+    @Then("kullanici Ode butonuna tiklar")
+    public void kullanici_ode_butonuna_tiklar() {
+        ReusableMethods.scrollToElement(ardaPage.stripePayButton);
+        ReusableMethods.bekle(2);
+
+        JavascriptExecutor js = (JavascriptExecutor) Driver.getDriver();
+        js.executeScript("arguments[0].scrollIntoView({block:'center'});", ardaPage.stripePayButton);
+        ReusableMethods.bekle(1);
+        js.executeScript("arguments[0].click();", ardaPage.stripePayButton);
+
+        ReusableMethods.bekle(5);
+
+
+
+        ardaPage.loginLink.click();
+        ReusableMethods.bekle(2);
+
+        ReusableMethods.scrollToElement(ardaPage.loginEmailInput);
+        ReusableMethods.bekle(1);
+
+        ardaPage.loginEmailInput.click();
+        ardaPage.loginEmailInput.clear();
+        ardaPage.loginEmailInput.sendKeys("ardaemre.user@instulearn.com");
+
+        ardaPage.loginPasswordInput.click();
+        ardaPage.loginPasswordInput.clear();
+        ardaPage.loginPasswordInput.sendKeys(ConfigReader.getProperty("gecerliPassword"));
+
+        ReusableMethods.bekle(1);
+        ardaPage.loginButton.click();
+        ReusableMethods.bekle(3);
+    }
+
+    @Then("Dashboard sayfasi acilmis olmali")
+    public void dashboard_sayfasi_acilmis_olmali() {
+        Assertions.assertTrue(Driver.getDriver().getCurrentUrl().contains("/panel"));
+        Assertions.assertTrue(ardaPage.dashboardSidebarLink.isDisplayed());
+    }
+
+    @And("Dashboard sidebar linkleri gorunur olmalidir")
+    public void dashboard_sidebar_linkleri_gorunur_olmalidir() {
+        Assertions.assertTrue(ardaPage.dashboardSidebarLink.isDisplayed());
+        Assertions.assertTrue(ardaPage.coursesSidebarLink.isDisplayed());
+        Assertions.assertTrue(ardaPage.meetingsSidebarLink.isDisplayed());
+        Assertions.assertTrue(ardaPage.quizzesSidebarLink.isDisplayed());
+        Assertions.assertTrue(ardaPage.certificatesSidebarLink.isDisplayed());
+        Assertions.assertTrue(ardaPage.financialSidebarLink.isDisplayed());
+        Assertions.assertTrue(ardaPage.supportSidebarLink.isDisplayed());
+        Assertions.assertTrue(ardaPage.notificationsSidebarLink.isDisplayed());
+        Assertions.assertTrue(ardaPage.settingsSidebarLink.isDisplayed());
+        Assertions.assertTrue(ardaPage.logoutSidebarLink.isDisplayed());
+    }
+
+    @And("Dashboard sidebar linkleri tiklanabilir olmalidir")
+    public void dashboard_sidebar_linkleri_tiklanabilir_olmalidir() {
+        Assertions.assertTrue(ardaPage.dashboardSidebarLink.isEnabled());
+        Assertions.assertTrue(ardaPage.coursesSidebarLink.isEnabled());
+        Assertions.assertTrue(ardaPage.meetingsSidebarLink.isEnabled());
+        Assertions.assertTrue(ardaPage.quizzesSidebarLink.isEnabled());
+        Assertions.assertTrue(ardaPage.certificatesSidebarLink.isEnabled());
+        Assertions.assertTrue(ardaPage.financialSidebarLink.isEnabled());
+        Assertions.assertTrue(ardaPage.supportSidebarLink.isEnabled());
+        Assertions.assertTrue(ardaPage.notificationsSidebarLink.isEnabled());
+        Assertions.assertTrue(ardaPage.settingsSidebarLink.isEnabled());
+        Assertions.assertTrue(ardaPage.logoutSidebarLink.isEnabled());
+    }
 }
+

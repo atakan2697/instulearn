@@ -30,5 +30,15 @@ Feature: US_035 - Store linki
     And Urun detay sayfasinda puanlama rating alaninin gorunur oldugu dogrulanir
     And Urunle ilgili yorum yapilabilen alanin gorunur oldugu dogrulanir
 
-
+  Scenario: TC04 Kullanici urun satin alma ve odeme adimlarini tamamlayabilmelidir
+    Given kullanici anasayfaya gider
+    When arda valid bilgilerle login olur
+    And kullanici Store linkine tiklar
+    And kullanici ilk urune tiklar
+    And kullanici Buy Now butonuna tiklar
+    And kullanici Checkout butonuna tiklar
+    And kullanici Stripe odeme yontemini secer
+    And kullanici Start Payment butonuna tiklar
+    And kullanici stripe odeme bilgilerini doldurur
+    Then kullanici Ode butonuna tiklar
 
