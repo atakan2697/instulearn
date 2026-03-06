@@ -205,6 +205,39 @@ public class SevkiPage {
     @FindBy(xpath = "//button[@id='getNextStep']")
     public WebElement nextPricingButton;
 
+    @FindBy(xpath = "//button[contains(@class,'btn-primary') and text()='Next']")
+    public WebElement nextContentButton;
+
+    @FindBy(xpath = "//button[normalize-space()='New FAQ']")
+    public WebElement newFaqButton;
+
+    @FindBy(xpath = "//label[normalize-space()='Title']/following::input[1]")
+    public WebElement faqTitleInput;
+
+    @FindBy(xpath = "//label[normalize-space()='Answer']/following::textarea[1]")
+    public WebElement faqAnswerTextarea;
+
+    @FindBy(xpath = "//button[normalize-space()='Save']")
+    public WebElement saveFaqButton;
+
+    @FindBy(xpath = "//button[@id='getNextStep']")
+    public WebElement nextFaqButton;
+
+    @FindBy(xpath = "//textarea[@name='message_for_reviewer']")
+    public WebElement messageForReviewerTextArea;
+
+    @FindBy(xpath = "//input[@id='rulesSwitch']")
+    public WebElement termsSwitch;
+
+    @FindBy(xpath = "//label[@for='rulesSwitch']")
+    public WebElement rulesSwitchLabel;
+
+    @FindBy(xpath = "//button[normalize-space()='Save as Draft']")
+    public WebElement saveMessageAsDraftButton;
+
+    @FindBy(xpath = "//a[@href='/panel/bundles']")
+    public WebElement myBundlesButton;
+
 }
 
 
