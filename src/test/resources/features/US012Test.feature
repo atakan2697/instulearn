@@ -27,6 +27,42 @@
       Then Beğeni puanının görüntülendiği doğrulanır
       And "Reserve a live meeting" butonunun görünür ve aktif olduğu doğrulanır
 
+    Scenario: TC05 Vısıtor kullanıcının ınstructor takvımıne erısebılmesı
+      * kullanici "instulearnUrl" anasayfaya gider
+      Given Instructors bölümüne scroll yapar
+      * kullanici 2 saniye bekler
+      Then Instructor isminin görünür olduğu doğrulanır
+      Then Beğeni puanının görüntülendiği doğrulanır
+      And "Reserve a live meeting" butonunun görünür ve aktif olduğu doğrulanır
+      And  instructorun takvimine erisilir
+
+
+    Scenario: TC06 Vısıtor kullanıcının randevu olusturmak ıstedıgınde logın uyarısı almas
+      * kullanici "instulearnUrl" anasayfaya gider
+      Given Instructors bölümüne scroll yapar
+      * kullanici 2 saniye bekler
+      Then Instructor isminin görünür olduğu doğrulanır
+      Then Beğeni puanının görüntülendiği doğrulanır
+      And "Reserve a live meeting" butonunun görünür ve aktif olduğu doğrulanır
+      And instructorun takvimine erisilir
+      And randevu olusturulmak istendiginde login uyarisi verilir
+
+    Scenario: TC07 Logın olmus kullanıcının randevu olusturabılmesı
+      * kullanici "instulearnUrl" anasayfaya gider
+      Given Instructors bölümüne scroll yapar
+      * kullanici 2 saniye bekler
+      Then Instructor isminin görünür olduğu doğrulanır
+      Then Beğeni puanının görüntülendiği doğrulanır
+      And "Reserve a live meeting" butonunun görünür ve aktif olduğu doğrulanır
+      And instructorun takvimine erisilir
+      And randevu olusturulmak istendiginde login uyarisi verilir
+      And kullanici login butonuna basar ve admin olarak giris yapar
+      And login olduktan sonra instructora randevu olusturulur
+
+
+
+
+
 
 
 
