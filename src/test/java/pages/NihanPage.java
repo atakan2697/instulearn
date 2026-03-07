@@ -71,9 +71,6 @@ public class NihanPage {
     @FindBy(id = "term")
     public WebElement termsCheckbox;
 
-    @FindBy(id = "studentRadio")
-    public WebElement studentRadioButton;
-
     //login Page Basligi
     @FindBy(xpath = "//h1[text()='Log in to your account']")
     public WebElement loginPageTitle;
@@ -151,15 +148,6 @@ public class NihanPage {
         }
     }
 
-    public void clearAllFields() {
-
-        emailField.clear();
-        fullNameField.clear();
-        passwordField.clear();
-        passwordConfirmationField.clear();
-
-    }
-
     public void enterEmail(String email) {
         emailField.clear();
         emailField.sendKeys(email);
@@ -178,18 +166,6 @@ public class NihanPage {
     public void enterRetypePassword(String password) {
         passwordConfirmationField.clear();
         passwordConfirmationField.sendKeys(password);
-    }
-
-    public void acceptTerms() {
-        if(!termsCheckbox.isSelected()) {
-            termsCheckbox.click();
-        }
-    }
-
-    public void selectStudent() {
-        if(!studentRadioButton.isSelected()) {
-            studentRadioButton.click();
-        }
     }
 
     public void clickSignup() {
@@ -248,38 +224,13 @@ public class NihanPage {
     @FindBy(css = "#bestRateInstructorsSwiper h3")
     public List<WebElement> instructorNames;
 
-    // Label’lar
-    @FindBy(css = "div.mt-30 input[name='categories[]'] + label")
-    public List<WebElement> categoryLabels;
-
-
-
-    @FindBy(css = "#bestRateInstructorsSwiper .course-teacher-card")
-    public List<WebElement> instructorCards;
-
-    // Kart içindeki fiyat
-    @FindBy(css = ".course-teacher-card span.font-20.text-primary")
-    public List<WebElement> instructorPrices;
-
     // İlk instructor kartındaki güncel fiyat
     @FindBy(css = ".course-teacher-card:first-of-type span.font-20.text-primary")
     public WebElement firstInstructorPrice;
 
-    // Kart içindeki ders adı (instructor adı)
-    @FindBy(css = ".course-teacher-card h3")
-    public List<WebElement> instructorNames1;
-
-    // İlk instructor kartındaki isim
-    @FindBy(css = ".course-teacher-card:first-of-type h3.mt-20.font-16.font-weight-bold.text-dark-blue")
-    public WebElement firstInstructorName;
-
     // İlk instructor kartındaki ders/unvan bilgisi
     @FindBy(css = ".course-teacher-card:first-of-type div.mt-5.font-14.text-gray")
     public WebElement firstInstructorTitle;
-
-    // Kart içindeki beğeni (rating)
-    @FindBy(css = ".course-teacher-card .badge-primary")
-    public List<WebElement> instructorRatings;
 
     // İlk instructor kartındaki rating / beğeni bilgisi
     @FindBy(css = ".course-teacher-card:first-of-type span.badge.badge-primary")
@@ -289,24 +240,11 @@ public class NihanPage {
     @FindBy(xpath = "//a[contains(@href,'/profile?tab=appointments') and contains(@class,'btn-primary')]")
     public List<WebElement> reserveMeetingButtons;
 
-
-
-    // İlk instructor için ilk saat aralığı label
-    @FindBy(xpath = "(//div[contains(@class,'course-teacher-card')]//div[contains(@class,'available-times')]//label)[1]")
-    public WebElement instructorFirstTimeLabel;
-
-    @FindBy(id = "availableTime91")
-    public WebElement availableTime;
-
-
     @FindBy(name = "description")
     public WebElement descriptionTextArea;
 
     @FindBy(xpath = "//button[normalize-space()='Reserve a Meeting']")
     public WebElement reserveMeetingButton;
-
-
-
 
 
     @FindBy(id = "navbarShopingCart")
@@ -315,32 +253,15 @@ public class NihanPage {
     @FindBy(xpath = "//a[normalize-space()='Go to cart']")
     public WebElement goToCartButton;
 
-    @FindBy(css = "label[for='Stripe']")
-    public WebElement checkoutButton;
-
-
-
     // Stripe ödeme seçeneği
     @FindBy(css = "label[for='Stripe']")
     public WebElement stripePaymentOption;
 
-    // Offline / Account Charge ödeme seçeneği
-    @FindBy(xpath = "//label[@for='offline']")
-    public WebElement offlinePaymentOption;
-
     @FindBy(id = "paymentSubmit")
     public WebElement startPaymentButton;
 
-
-
-    @FindBy(id = "cardNumber")
-    public WebElement cardNumberInput;
-
-
     @FindBy(xpath = "//button[@type='submit']")
     public WebElement payButton;
-
-
 
     //Congratulations basligi
     @FindBy(xpath = "//h2[.='Congratulations!']")
@@ -380,8 +301,6 @@ public class NihanPage {
 
     public void selectCategory(String categoryName) {
         WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(15));
-       ;
-
         WebElement category =
                 wait.until(
                         ExpectedConditions.elementToBeClickable(By.xpath("//label[normalize-space()='" + categoryName + "']")));
@@ -401,15 +320,6 @@ public class NihanPage {
         day.click();
     }
 
-    //Time secme
-    public void selectTimeRange(String timeRange){
-
-        String dynamicXpath = "//label[normalize-space()='" + timeRange + "']";
-
-        WebElement timeElement = Driver.getDriver().findElement(By.xpath(dynamicXpath));
-        timeElement.click();
-    }
-
     public void selectMeetingType(String meetingType){
 
         By dynamicLocator = By.xpath(
@@ -418,29 +328,6 @@ public class NihanPage {
 
         new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10))
                 .until(ExpectedConditions.elementToBeClickable(dynamicLocator)).click();
-    }
-
-    // Dinamik ödeme seçme methodu
-    public void selectPaymentType(String paymentType) {
-
-        switch (paymentType.toLowerCase()) {
-
-            case "stripe":
-                stripePaymentOption.click();
-                break;
-
-            case "offline":
-                offlinePaymentOption.click();
-                break;
-
-            default:
-                throw new IllegalArgumentException("Gecersiz odeme tipi: " + paymentType);
-        }
-    }
-
-    public void enterCardNumber(String cardNumber){
-        cardNumberInput.clear();
-        cardNumberInput.sendKeys(cardNumber);
     }
 
     public void fillCardDetails( String number, String expiry, String cvc, String fullName) {
@@ -481,56 +368,29 @@ public class NihanPage {
     // Home Page Alanları
     // -----------------------------
 
-    @FindBy(css = "a[href='/logout']")
-    public WebElement sidebarLogoutLink;
-
-    @FindBy(linkText = "Home")
-    public WebElement homeIcon;
-
     @FindBy(xpath = "//span[contains(@class,'user-name')]")
     public WebElement userName;
 
-    @FindBy(id = "panelSidebar")
-    public WebElement sidebar;
-
     @FindBy(xpath = "//a[normalize-space(span[text()='Log out'])]")
     public WebElement logoutLink;
-    // Sidebar container
-    @FindBy(id = "panelSidebar")
-    public WebElement sidebarContainer;
 
     // Örnek olarak Noticeboard element
     @FindBy(xpath = "//span[text()='Noticeboard']")
     public WebElement noticeboardItem;
 
-
     // -----------------------------
     // Yardımcı Metotlar
     // -----------------------------
 
-
-
-//    public static void verifyLinkVisible(String linkText) {
-//
-//        WebElement link = Driver.getDriver()
-//                .findElement(By.xpath("//a[contains(text(),'" + linkText + "')]"));
-//
-//        Assertions.assertTrue(link.isDisplayed());
-//    }
-
     public WebElement getSidebarLink(String linkText) {
-
         return Driver.getDriver().findElement(
                 By.xpath("//div[@id='panelSidebar']//span[normalize-space()='" + linkText + "']")
         );
     }
 
     public WebElement getHeaderLink(String linkText){
-
-
         return Driver.getDriver()
                 .findElement(By.xpath("//a[normalize-space()='" + linkText + "']"));
-
     }
 
     public WebElement getDropdownLink(String linkText){
@@ -539,7 +399,6 @@ public class NihanPage {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//div[contains(@class,'custom-dropdown-body')]//a[.//span[text()='" + linkText + "']]")
         ));
-
     }
 
     public void hoverUserDropdown(){
@@ -547,19 +406,7 @@ public class NihanPage {
         actions.moveToElement(userName).perform();
     }
 
-
-
-
-
-
-
-
-
-
     public By sidebarLocator = By.id("panelSidebar");
-
-
-
 
     public WebElement getSidebarElementByName(String name) {
         return Driver.getDriver().findElement(By.xpath("//a[contains(text(),'" + name + "') and contains(@href,'logout')]"));
@@ -567,7 +414,7 @@ public class NihanPage {
 
     public void scrollSidebarUntilElementVisible(String elementName) {
 
-        WebElement sidebar = Driver.getDriver().findElement(sidebarLocator);
+         Driver.getDriver().findElement(sidebarLocator);
         Actions actions = new Actions(Driver.getDriver());
 
         int attempts = 0;
@@ -591,87 +438,4 @@ public class NihanPage {
             attempts++;
         }
     }
-
-//    public void scrollToLogout() {
-//        Actions actions = new Actions(Driver.getDriver());
-//
-//
-//        actions.moveToElement(noticeboardItem).perform();
-//        int attempts = 0;
-//        while (attempts < 100) { // max 100 deneme
-//            try {
-//                if (logoutLink.isDisplayed()) {
-//                    break; // Logout görünüyorsa dur
-//                }
-//            } catch (Exception e) {
-//                // Logout henüz görünmüyorsa scroll devam eder
-//            }
-//
-//            // Fareyi sidebar üzerine götür
-//            actions.moveToElement(sidebarContainer).perform();
-//
-//            // Fareyi aşağı kaydır (Logout görünene kadar)
-//            actions.moveByOffset(0, 50).perform();
-//
-//            try { Thread.sleep(150); } catch (InterruptedException ignored) {}
-//            attempts++;
-//        }
-//    }
-
-
-
-
-    /**
-     * Sidebar üstüne fareyi getirir ve logout görünene kadar scroll yapar.
-     */
-    public void scrollToLogout() {
-        Actions actions = new Actions(Driver.getDriver());
-
-        // Sidebar üzerine fareyi getir
-        actions.moveToElement(sidebar).perform();
-
-        // Logout görünene kadar scroll ve stale element retry
-        int maxAttempts = 5;
-        int attempts = 0;
-
-        while(attempts < maxAttempts) {
-            try {
-                if(logoutLink.isDisplayed()) {
-                    // Görünüyorsa dur
-                    break;
-                } else {
-                    // Görünmüyorsa JS ile biraz kaydır
-                    ((JavascriptExecutor) Driver.getDriver()).executeScript("arguments[0].scrollIntoView({behavior:'smooth', block:'center'});", logoutLink);
-                }
-            } catch(StaleElementReferenceException e) {
-                // Element stale olduysa tekrar bul
-                PageFactory.initElements(Driver.getDriver(), this);
-            }
-            attempts++;
-        }
-    }
-
-    public boolean isLogoutVisible() {
-        try {
-            return logoutLink.isDisplayed();
-        } catch (StaleElementReferenceException e) {
-            PageFactory.initElements(Driver.getDriver(), this);
-            return logoutLink.isDisplayed();
-        }
-    }
-
-    public boolean isLogoutClickable() {
-        try {
-            return logoutLink.isEnabled();
-        } catch (StaleElementReferenceException e) {
-            PageFactory.initElements(Driver.getDriver(), this);
-            return logoutLink.isEnabled();
-        }
-    }
-
-
-
 }
-
-
-
