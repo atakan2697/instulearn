@@ -4,17 +4,13 @@ Feature: Kullanıcının güvenli şekilde sistemden çıkış yapabilmesi
     Given  kullanici_InstuLern_anasayfaya_gider
     When Kullanıcı "Instructor" olarak login olur
 
+
   Scenario: Dashboard sayfasında Logout linki görünür ve aktif
-    #When Kullanıcı header bölümündeki kullanıcı adına tıklar
-    #Then Kullanici acilan sekmede "Dashbord" butonuna tiklar
     And Kullanici sol side barda Logout gorunene kadar sayfayi asagi surukler
     Then Dashboard sayfasında Logout linki görünür olmalı
     And Dashboard sayfasında Logout linki tıklanabilir olmalı
 
   Scenario: Dashboard sayfasından başarılı şekilde Logout olunabilmeli
-    #When Kullanıcı header bölümündeki kullanıcı adına tıklar
-    #Then Kullanıcı Dropdown icindeki "Dashboard" linkine tıklar
-    #And Kullanici sol side barda Logout gorunene kadar sayfayi asagi surukler
     When Kullanıcı Dashboard sayfasındaki Logout linkine tıklar
     Then Kullanıcı sistemden başarıyla çıkış yapabilmeli
 

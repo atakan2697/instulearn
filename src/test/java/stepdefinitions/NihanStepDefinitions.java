@@ -3,6 +3,7 @@ package stepdefinitions;
 import io.cucumber.java.en.*;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.WheelInput;
@@ -641,55 +642,23 @@ public class NihanStepDefinitions {
     @And("Kullanici sol side barda Logout gorunene kadar sayfayi asagi surukler")
     public void kullanici_sol_side_barda_logout_gorunene_kadar_sayfayi_asagi_surukler() {
 
-         RegisterPage.scrollToLogout();
+        WebElement logoutButton = Driver.getDriver().findElement(By.xpath("//a[@href='/logout']"));
+        JavascriptExecutor js = (JavascriptExecutor) Driver.getDriver();
+        js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", logoutButton);
+        try { Thread.sleep(500); } catch (InterruptedException e) { e.printStackTrace(); }
+
 
 
     }
 
-    @When("Kullanıcı Dashboard sayfasındaki {string} linkine tıklar")
-    public void kullanıcı_dashboard_sayfasındaki_linkine_tıklar(String linkText) {
-        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
-
-        wait.until(ExpectedConditions.elementToBeClickable(
-                RegisterPage.getSidebarLink(linkText)));
-
-        RegisterPage.getSidebarLink(linkText).click();
-    }
     @When("Kullanıcı Dashboard sayfasındaki Logout linkine tıklar")
     public void kullanıcı_dashboard_sayfasındaki_logout_linkine_tıklar() {
 
-        Actions actions = new Actions(Driver.getDriver());
-        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
-
-        WebElement sidebar = wait.until(ExpectedConditions.visibilityOf(RegisterPage.sidebar));
-        WebElement logout = RegisterPage.logoutLink;
-
-        // Mouse sidebar üzerine gelsin
-        actions.moveToElement(sidebar).perform();
-
-        int maxScroll = 20;
-
-        for (int i = 0; i < maxScroll; i++) {
-
-            try {
-                if (logout.isDisplayed()) {
-                    break;
-                }
-            } catch (Exception e) {}
-
-            // Küçük scroll
-            actions.scrollFromOrigin(
-                    WheelInput.ScrollOrigin.fromElement(sidebar),
-                    0,
-                    120
-            ).perform();
-
-            try {
-                Thread.sleep(300);
-            } catch (InterruptedException e) {}
-        }
-
-        wait.until(ExpectedConditions.elementToBeClickable(logout)).click();
+        WebElement logoutButton = Driver.getDriver().findElement(By.xpath("//a[@href='/logout']"));
+        JavascriptExecutor js = (JavascriptExecutor) Driver.getDriver();
+        js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", logoutButton);
+        try { Thread.sleep(5000); } catch (InterruptedException e) { e.printStackTrace(); }
+        logoutButton.click();
     }
 
     @And("Kullanıcı sistemden başarıyla çıkış yapabilmeli")
