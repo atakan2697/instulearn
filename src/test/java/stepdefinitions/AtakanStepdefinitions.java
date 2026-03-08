@@ -13,6 +13,7 @@ import utilities.ConfigReader;
 import utilities.Driver;
 import utilities.ReusableMethods;
 
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -24,7 +25,7 @@ public class AtakanStepdefinitions {
     String courseWhd;
     String kursProfilWhd;
 
-    Faker faker= new Faker();
+    Faker faker= new Faker(new Locale("Tr"));
     Actions actions= new Actions(Driver.getDriver());
 
     JavascriptExecutor js= (JavascriptExecutor) Driver.getDriver();
@@ -193,7 +194,7 @@ public class AtakanStepdefinitions {
 
     @Then("sayfada scrool islemi yapılır")
     public void sayfada_scrool_islemi_yapılır() {
-        js.executeScript("window.scrollBy(0,120)");
+        js.executeScript("window.scrollBy(0,900)");
         ReusableMethods.bekle(2);
     }
 
@@ -218,7 +219,7 @@ public class AtakanStepdefinitions {
     }
     @Then("kurs detay sayfasına yönlendirme yapar")
     public void kurs_detay_sayfasına_yönlendirme_yapar() {
-        String expectedUrl= "https://qa.instulearn.com/course/Cyber-Security";
+        String expectedUrl= "https://qa.instulearn.com/course/Java";
         String actualUrl= Driver.getDriver().getCurrentUrl();
         Assertions.assertEquals(expectedUrl,actualUrl);
 
@@ -301,18 +302,22 @@ public class AtakanStepdefinitions {
     public void register_butonuna_tiklar_yeni_bir_instructor_hesabı_oluşturur() {
         atakanPage.registerButonu.click();
         js.executeScript("window.scrollBy(0,100)");
+        ReusableMethods.bekle(1);
         atakanPage.registerInstructorSecimi.click();
         atakanPage.email.click();
         atakanPage.email.clear();
         atakanPage.email.sendKeys(faker.internet().emailAddress());
+        ReusableMethods.bekle(1);
         atakanPage.registerFullName.click();
         atakanPage.registerFullName.sendKeys(faker.name().fullName());
+        ReusableMethods.bekle(1);
         atakanPage.password.click();
         atakanPage.password.clear();
-       // String password=ConfigReader.getProperty("gecerliPassword");
         atakanPage.password.sendKeys(ConfigReader.getProperty("gecerliPassword"));
+        ReusableMethods.bekle(1);
         atakanPage.registerConfirmPassword.click();
         atakanPage.registerConfirmPassword.sendKeys(ConfigReader.getProperty("gecerliPassword"));
+        ReusableMethods.bekle(1);
         js.executeScript("arguments[0].click();", atakanPage.registerIAgreeButonu);
         ReusableMethods.bekle(1);
         atakanPage.registerSignUpButonu.click();
@@ -322,7 +327,8 @@ public class AtakanStepdefinitions {
 
     @When("buy now butonuna tıklanr")
     public void buy_now_butonuna_tıklanr() {
-        js.executeScript("window.scrollBy(0,150)");
+        js.executeScript("window.scrollBy(0,250)");
+        ReusableMethods.bekle(1);
         atakanPage.buyNowButonu.click();
         ReusableMethods.bekle(1);
 
@@ -346,11 +352,13 @@ public class AtakanStepdefinitions {
     public void kart_bilgileri_alanına_gecerli_kart_bilgileri_girilir() {
         atakanPage.ödemeKartBilgileri.click();
         atakanPage.ödemeKartBilgileri.sendKeys("4242424242424242");
+        ReusableMethods.bekle(2);
         atakanPage.ödemeKartCC.click();
         atakanPage.ödemeKartCC.sendKeys("1027");
+        ReusableMethods.bekle(2);
         atakanPage.ödemeKartCVC.click();
         atakanPage.ödemeKartCVC.sendKeys("777");
-        ReusableMethods.bekle(5);
+        ReusableMethods.bekle(2);
 
     }
     @When("kart sahibi adı alanına gecerli bilgiler girilir")
@@ -363,13 +371,14 @@ public class AtakanStepdefinitions {
     @When("güvenli ödeme işlemine tıklanır")
     public void güvenli_ödeme_işlemine_tıklanır() {
         js.executeScript("arguments[0].click();", atakanPage.güvenliÖdeme);
-        ReusableMethods.bekle(1);
+        ReusableMethods.bekle(2);
 
     }
     @Then("telefon numarası bilgileri girlir")
     public void telefon_numarası_bilgileri_girlir() {
+       // String phone= faker.number().digits(12);
         atakanPage.ödemeTelBilgileri.click();
-        atakanPage.ödemeTelBilgileri.sendKeys(faker.phoneNumber().cellPhone());
+        atakanPage.ödemeTelBilgileri.sendKeys("05555555050");
         js.executeScript("window.scrollBy(0,250)");
         ReusableMethods.bekle(3);
     }
