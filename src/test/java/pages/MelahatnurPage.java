@@ -5,9 +5,8 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import utilities.Driver;
 
-import java.security.cert.X509Certificate;
 import java.util.List;
-import java.util.logging.XMLFormatter;
+
 
 public class MelahatnurPage {
     public MelahatnurPage(){
@@ -23,8 +22,6 @@ public class MelahatnurPage {
     @FindBy(css = ".owl-dot")
     public List<WebElement> sliderNoktasi;
 
-    @FindBy(css = ".owl-dot.active")
-    public WebElement activeSliderNoktasi; // Sadece o an seçili olan aktif nokta
 
     @FindBy(css = ".owl-stage-outer")
     public WebElement instructorSliderArea;
@@ -42,6 +39,37 @@ public class MelahatnurPage {
 
     @FindBy(xpath = "//div[@data-navigator]")
     public WebElement takvim;
+
+    @FindBy(css = ".calendar-day:not(.disabled):not(.empty)")
+    public List<WebElement> musaitGunler;
+
+    @FindBy(css = ".alert-warning, .swal2-popup, div[class*='login-required'], div[class*='alert']")
+    public WebElement loginUyarisi;
+
+    // US012 - Randevu takvim elementleri
+    @FindBy(xpath = "//div[@id='appointments']//span[translate(normalize-space(text()), '0123456789', '') = '' and string-length(normalize-space(text())) >= 1 and string-length(normalize-space(text())) <= 2]")
+    public List<WebElement> takvimGunler;
+
+    @FindBy(id = "availableTimes")
+    public WebElement availableTimesDiv;
+
+    @FindBy(xpath = "//div[@id='availableTimes']//label")
+    public WebElement saatLabel;
+
+    @FindBy(xpath = "//label[@for='meetingTypeOnline']")
+    public WebElement meetingTypeOnlineLabel;
+
+    @FindBy(xpath = "//button[contains(@class,'js-submit-form')]")
+    public WebElement submitFormBtn;
+
+    @FindBy(css = ".jq-toast-single")
+    public WebElement toastMesaj;
+
+    @FindBy(css = ".time-slot:not(.disabled), .meeting-time:not(.disabled)")
+    public List<WebElement> musaitSaatler;
+
+    @FindBy(xpath = "//button[contains(text(),'Book') or contains(text(),'Confirm') or contains(text(),'Reserve')]")
+    public WebElement rezervasyonOnayla;
 
     @FindBy(xpath = "//a[text()='Login']")
     public WebElement logineGidisButonu;
@@ -74,11 +102,7 @@ public class MelahatnurPage {
     @FindBy(name = "mobile")
     public WebElement basicInformationTelefonNumber;
 
-    @FindBy(xpath = "//span[text()='English']")
-    public WebElement basicInformationLanguange;
 
-    @FindBy(xpath = "//span[contains(text(),'UTC')]")
-    public WebElement basicInformationTimeZone;
 
     @FindBy(xpath = "//button[text()='Save']")
     public WebElement saveButonu;
@@ -111,12 +135,95 @@ public class MelahatnurPage {
     @FindBy(xpath = "//input[@type='file']")
     public WebElement profileImageInput;
 
-    // Page Class içinde:
+    @FindBy(xpath = "//h2[text()='Image is too small.']" )
+    public WebElement hataMesaji;
+
+
     @FindBy(xpath = "//textarea[@name='about']")
     public WebElement biographyBox;
 
     @FindBy(xpath = "//textarea[@name='bio']")
     public WebElement jobTitleBox;
+
+    @FindBy(xpath = "//button[text()='Add education']")
+    public WebElement addEducation;
+
+    @FindBy(xpath = "//button[text()='Add education']")
+    public WebElement educationEklemeBox;
+
+    @FindBy(xpath = "//button[@id='userAddExperiences']")
+    public WebElement addExperience;
+
+    @FindBy(xpath = "(//button[@id='saveExperience'])[2]")
+    public WebElement experinceSaveButon;
+
+    @FindBy(xpath = "(//input[@id='new_experience_val'])[2]")
+    public WebElement newExperienceBox;
+
+    @FindBy(xpath = "//div[@class='checkbox-button mr-15 mt-10']")
+    public List<WebElement> skillsTopicler;
+
+    @FindBy(xpath = "//option[text()='Select account type']")
+    public WebElement selectAccountType;
+
+   @FindBy(xpath = "//textarea[@name='zoom_api_key']")
+   public WebElement zoomClientID;
+
+   @FindBy(xpath = "//textarea[@name='zoom_api_secret']")
+   public WebElement zoomClientSecret;
+
+   @FindBy(xpath = "//textarea[@name='zoom_account_id']")
+   public WebElement zoomAccountID;
+
+
+   @FindBy(xpath = "//input[@name='meeting_type']")
+   public List<WebElement> meetingType;
+
+    @FindBy(xpath = "//input[@name='gender']")
+    public List<WebElement> genders;
+
+   @FindBy(xpath = "//input[@name='age']")
+   public WebElement age;
+
+   @FindBy(xpath = "//input[@name='level_of_training[]']")
+   public List<WebElement> trainingLevel;
+
+   @FindBy(xpath = "//select[@name='country_id']")
+   public List<WebElement> countries;
+
+    @FindBy(xpath = "//select[@name='province_id']")
+    public List<WebElement> provinces;
+
+    @FindBy(xpath = "//select[@name='city_id']")
+    public List<WebElement> cities;
+
+    @FindBy(xpath = "//select[@name='district_id']")
+    public List<WebElement> district;
+
+    @FindBy(xpath = "//input[@name='address']")
+    public WebElement adress;
+
+    // US031 - Education modal elementleri
+    @FindBy(id = "userAddEducations")
+    public WebElement addEducationBtn;
+
+    @FindBy(id = "newEducationSwlModal")
+    public WebElement newEducationModal;
+
+    @FindBy(id = "new_education_val")
+    public WebElement newEducationInput;
+
+    @FindBy(xpath = "//div[@id='newEducationSwlModal']//button[normalize-space()='Save']")
+    public WebElement educationModalSaveBtn;
+
+    @FindBy(xpath = "//div[@id='newEducationSwlModal']//button[contains(@class,'swal2-confirm')]")
+    public WebElement educationModalConfirmBtn;
+
+    @FindBy(xpath = "//a[@class='delete-action btn btn-sm btn-danger']")
+    public WebElement deleteAccount;
+
+    @FindBy(xpath = "//button[@id='swlDelete']")
+    public WebElement yesIconfirm;
 
 
 

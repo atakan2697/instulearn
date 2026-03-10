@@ -1,13 +1,12 @@
 package stepdefinitions;
 
 import com.github.javafaker.Faker;
-import io.cucumber.java.bs.A;
 import io.cucumber.java.en.*;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -17,12 +16,17 @@ import utilities.Driver;
 import utilities.ReusableMethods;
 
 import java.time.Duration;
-import java.time.Instant;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Random;
+
+import static utilities.Driver.driver;
 
 public class MelahatnurStepdefinitions {
 
     MelahatnurPage melahatnurPage = new MelahatnurPage();
     JavascriptExecutor js = (JavascriptExecutor) Driver.getDriver();
+    private static String instructorPageUrl;
 
 
     @When("Body bolumunde Instructors basliginin gorunurlugu dogrulanir")
@@ -79,40 +83,125 @@ public class MelahatnurStepdefinitions {
     public void butonununGörünürVeAktifOlduğuDoğrulanır(String butonMetni) {
 
 
-            Assertions.assertFalse(melahatnurPage.reserveButonu.isEmpty(), "Buton DOM'da bulunamadı!");
-            WebElement buton = melahatnurPage.reserveButonu.get(0);
+        Assertions.assertFalse(melahatnurPage.reserveButonu.isEmpty(), "Buton DOM'da bulunamadı!");
+        WebElement buton = melahatnurPage.reserveButonu.get(0);
 
-            // Sayfayı kaydır
-            JavascriptExecutor js = (JavascriptExecutor) Driver.getDriver();
-            js.executeScript("arguments[0].scrollIntoView({block: 'center'});", buton);
+        JavascriptExecutor js = (JavascriptExecutor) Driver.getDriver();
+        js.executeScript("arguments[0].scrollIntoView({block: 'center'});", buton);
 
-            // Görünürlük kontrolü
-            boolean isExist = buton.getSize().getWidth() > 0 && buton.getSize().getHeight() > 0;
-            Assertions.assertTrue(isExist, "Buton boyutları 0'dan büyük değil!");
+        boolean isExist = buton.getSize().getWidth() > 0 && buton.getSize().getHeight() > 0;
+        Assertions.assertTrue(isExist, "Buton boyutları 0'dan büyük değil!");
 
-            // KRİTİK EKSİK: Tıklama işlemi
-            // Eğer standart click() hata verirse (JS engelinden dolayı), JS click de kullanabilirsiniz.
-            buton.click();
-        }
+        js.executeScript("arguments[0].click();", buton);
+    }
 
     @And("instructorun takvimine erisilir")
     public void instructorunTakvimineErisilir() {
-
         Assertions.assertTrue(melahatnurPage.takvim.isDisplayed());
-
+        instructorPageUrl = Driver.getDriver().getCurrentUrl();
     }
 
 
     @And("randevu olusturulmak istendiginde login uyarisi verilir")
     public void randevuOlusturulmakIstendigindeLoginUyarisiVerilir() {
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
 
+        wait.until(ExpectedConditions.visibilityOf(melahatnurPage.takvim));
+        js.executeScript("arguments[0].scrollIntoView({block: 'center'});", melahatnurPage.takvim);
+        ReusableMethods.bekle(2);
+
+        List<WebElement> tumGunler = melahatnurPage.takvimGunler;
+        Assertions.assertFalse(tumGunler.isEmpty(), "Takvimde tiklanabilir gun bulunamadi!");
+
+        int bugunNoTC06 = LocalDate.now().getDayOfMonth();
+        WebElement gun1 = null;
+        for (WebElement g : tumGunler) {
+            int gunNo = Integer.parseInt(g.getText().trim());
+            if (gunNo > bugunNoTC06) {
+                gun1 = g;
+                break;
+            }
+        }
+        Assertions.assertNotNull(gun1, "Gelecekte musait gun bulunamadi!");
+
+        js.executeScript("arguments[0].scrollIntoView({block: 'center'});", gun1);
+        js.executeScript("arguments[0].click();", gun1);
+        ReusableMethods.bekle(2);
+
+        wait.until(ExpectedConditions.visibilityOf(melahatnurPage.availableTimesDiv));
+        js.executeScript("arguments[0].scrollIntoView({block: 'center'});", melahatnurPage.availableTimesDiv);
+        ReusableMethods.bekle(2);
+
+        wait.until(ExpectedConditions.elementToBeClickable(melahatnurPage.saatLabel));
+        js.executeScript("arguments[0].click();", melahatnurPage.saatLabel);
+        ReusableMethods.bekle(1);
+
+        wait.until(ExpectedConditions.visibilityOf(melahatnurPage.meetingTypeOnlineLabel));
+        js.executeScript("arguments[0].scrollIntoView({block: 'center'});", melahatnurPage.meetingTypeOnlineLabel);
+        js.executeScript("arguments[0].click();", melahatnurPage.meetingTypeOnlineLabel);
+
+        wait.until(ExpectedConditions.visibilityOf(melahatnurPage.submitFormBtn));
+        js.executeScript("arguments[0].scrollIntoView({block: 'center'});", melahatnurPage.submitFormBtn);
+        ReusableMethods.bekle(1);
+        js.executeScript("arguments[0].click();", melahatnurPage.submitFormBtn);
+
+        wait.until(ExpectedConditions.visibilityOf(melahatnurPage.toastMesaj));
+        Assertions.assertTrue(melahatnurPage.toastMesaj.isDisplayed(), "Login uyarisi goruntulenmedi!");
+        Assertions.assertTrue(melahatnurPage.toastMesaj.getText().contains("login"), "Toast mesaji login icermiyor!");
     }
 
     @And("login olduktan sonra instructora randevu olusturulur")
     public void loginOlduktanSonraInstructoraRandevuOlusturulur() {
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(15));
+
+
+        Driver.getDriver().navigate().to(instructorPageUrl);
+        ReusableMethods.bekle(2);
+
+        wait.until(ExpectedConditions.visibilityOf(melahatnurPage.takvim));
+        js.executeScript("arguments[0].scrollIntoView({block: 'center'});", melahatnurPage.takvim);
+        ReusableMethods.bekle(2);
+
+        List<WebElement> tumGunler2 = melahatnurPage.takvimGunler;
+        Assertions.assertFalse(tumGunler2.isEmpty(), "Takvimde tiklanabilir gun bulunamadi!");
+
+        int bugunNo = LocalDate.now().getDayOfMonth();
+        WebElement gun1b = null;
+        for (WebElement g : tumGunler2) {
+            int gunNo = Integer.parseInt(g.getText().trim());
+            if (gunNo > bugunNo) {
+                gun1b = g;
+                break;
+            }
+        }
+        Assertions.assertNotNull(gun1b, "Gelecekte musait gun bulunamadi!");
+
+        js.executeScript("arguments[0].scrollIntoView({block: 'center'});", gun1b);
+        js.executeScript("arguments[0].click();", gun1b);
+        ReusableMethods.bekle(2);
+
+        wait.until(ExpectedConditions.visibilityOf(melahatnurPage.availableTimesDiv));
+        js.executeScript("arguments[0].scrollIntoView({block: 'center'});", melahatnurPage.availableTimesDiv);
+        ReusableMethods.bekle(2);
+
+        wait.until(ExpectedConditions.elementToBeClickable(melahatnurPage.saatLabel));
+        js.executeScript("arguments[0].click();", melahatnurPage.saatLabel);
+        ReusableMethods.bekle(1);
+
+        wait.until(ExpectedConditions.visibilityOf(melahatnurPage.meetingTypeOnlineLabel));
+        js.executeScript("arguments[0].scrollIntoView({block: 'center'});", melahatnurPage.meetingTypeOnlineLabel);
+        js.executeScript("arguments[0].click();", melahatnurPage.meetingTypeOnlineLabel);
+
+        wait.until(ExpectedConditions.visibilityOf(melahatnurPage.submitFormBtn));
+        js.executeScript("arguments[0].scrollIntoView({block: 'center'});", melahatnurPage.submitFormBtn);
+        ReusableMethods.bekle(1);
+        js.executeScript("arguments[0].click();", melahatnurPage.submitFormBtn);
+
+        ReusableMethods.bekle(3);
+        String currentUrl = Driver.getDriver().getCurrentUrl();
+        boolean rezervasyonBasarili = currentUrl.contains("meetings") || currentUrl.contains("appointments") || currentUrl.contains("booking") || currentUrl.contains("cart");
+        Assertions.assertTrue(rezervasyonBasarili, "Rezervasyon tamamlanamadi! Mevcut URL: " + currentUrl);
     }
-
-
 
 
     // ================================== US031====================================//
@@ -160,14 +249,12 @@ public class MelahatnurStepdefinitions {
         melahatnurPage.basicInformationTelefonNumber.sendKeys("0544 765 78 90");
 
 
-        // 1. Language Seçimi (Çok basit)
+
         Select select = new Select(melahatnurPage.languageDropdown);
         select.selectByValue("EN");
 
-        // 2. Time Zone Seçimi (Select2 olduğu için adım adım)
-        melahatnurPage.timeZoneKutusu.click(); // Önce dropdown listesini açıyoruz
+        melahatnurPage.timeZoneKutusu.click();
 
-        // Listeden "UTC" içeren seçeneği bulup tıklıyoruz
         for (WebElement option : melahatnurPage.timeZoneSecenekleri) {
             if (option.getText().contains("UTC")) {
                 option.click();
@@ -184,21 +271,26 @@ public class MelahatnurStepdefinitions {
     @When("kaydedip ilerler")
     public void kaydedip_ilerler() {
 
-        // 1. Önce sayfanın kendine gelmesi için 2 saniye bekle
+
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(30));
+        try {
+            wait.until(ExpectedConditions.invisibilityOf(melahatnurPage.toastMesaj));
+        } catch (TimeoutException e) {
+            ((JavascriptExecutor) Driver.getDriver()).executeScript(
+                    "document.querySelectorAll('.jq-toast-single').forEach(e => e.remove());"
+            );
+        }
+
+        ((JavascriptExecutor) Driver.getDriver()).executeScript(
+                "arguments[0].scrollIntoView({block: 'center'});", melahatnurPage.saveButonu);
+        ((JavascriptExecutor) Driver.getDriver()).executeScript("arguments[0].click();", melahatnurPage.saveButonu);
+
         ReusableMethods.bekle(2);
 
-        // 2. Elementi doğrudan driver ile taze bir şekilde bul ve tıkla
-        // Bu yöntem PageFactory'deki stale sorununu bypass eder
-        Driver.getDriver().findElement(By.xpath("//button[text()='Save']")).click();
-
-        // 3. Save sonrası sayfa bir daha yenileniyorsa kısa bir ara ver
-        ReusableMethods.bekle(2);
-
-        // 4. Next butonunu da aynı tazelikte bul ve tıkla
-        Driver.getDriver().findElement(By.xpath("//button[text()='Next']")).click();
-
+        ((JavascriptExecutor) Driver.getDriver()).executeScript(
+                "arguments[0].scrollIntoView({block: 'center'});", melahatnurPage.nextButonu);
+        ((JavascriptExecutor) Driver.getDriver()).executeScript("arguments[0].click();", melahatnurPage.nextButonu);
     }
-
 
 
     @And("degisiklikler kaydedilir")
@@ -213,7 +305,7 @@ public class MelahatnurStepdefinitions {
         melahatnurPage.basicInformationName.sendKeys("Melahatnur");
         melahatnurPage.basicInformationPassword.sendKeys(ConfigReader.getProperty("gecerliPassword"));
         melahatnurPage.basicInformationPasswordTekrari.sendKeys(ConfigReader.getProperty("gecerliPassword"));
-        melahatnurPage.basicInformationTelefonNumber.sendKeys("0544 765 78 90");
+        melahatnurPage.basicInformationTelefonNumber.sendKeys("544 765 78 90");
 
 
         Select select = new Select(melahatnurPage.languageDropdown);
@@ -253,9 +345,8 @@ public class MelahatnurStepdefinitions {
 
     @And("Desteklenmeyen formatta bir fotograf yuklenir")
     public void desteklenmeyenFormattaBirFotografYuklenir() {
-        // yapamadmmmmmmm
 
-        String bigFilePath = System.getProperty("user.dir") + "src/test/resources/buyuk_resim.jpg";
+        String bigFilePath = System.getProperty("user.dir") + "/src/test/resources/buyuk_resim.jpg";
         melahatnurPage.profileImageInput.sendKeys(bigFilePath);
 
     }
@@ -263,34 +354,193 @@ public class MelahatnurStepdefinitions {
     @And("About kismina bilgiler girilir")
     public void aboutKisminaBilgilerGirilir() {
 
-            Faker faker = new Faker();
-            WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(15));
+        Faker faker = new Faker();
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(20));
 
-            // 1. Önce elemanın görünür ve tıklanabilir olmasını bekle
-            wait.until(ExpectedConditions.visibilityOf(melahatnurPage.biographyBox));
+        ReusableMethods.bekle(2);
 
-            // 2. Sayfayı elemana kaydır (Scroll) - Mac'te bazen bu gerekir
-            ((JavascriptExecutor) Driver.getDriver()).executeScript("arguments[0].scrollIntoView(true);", melahatnurPage.biographyBox);
+        WebElement biographyElement = wait.until(ExpectedConditions.elementToBeClickable(melahatnurPage.biographyBox));
 
-            // 3. Bilgileri gir
-            melahatnurPage.biographyBox.clear();
-            melahatnurPage.biographyBox.sendKeys(faker.lorem().paragraph(5));
+        ((JavascriptExecutor) Driver.getDriver()).executeScript(
+                "arguments[0].scrollIntoView({block: 'center'});", biographyElement);
+        ReusableMethods.bekle(2);
 
-            // Job Title için de aynısını yapalım
-            melahatnurPage.jobTitleBox.clear();
-            melahatnurPage.jobTitleBox.sendKeys(faker.job().title());
+        biographyElement.clear();
+        biographyElement.sendKeys(faker.lorem().paragraph(2));
+
+        WebElement jobTitleElement = wait.until(ExpectedConditions.elementToBeClickable(melahatnurPage.jobTitleBox));
+        ((JavascriptExecutor) Driver.getDriver()).executeScript(
+                "arguments[0].scrollIntoView({block: 'center'});", jobTitleElement);
+        ReusableMethods.bekle(2);
+
+        jobTitleElement.clear();
+        jobTitleElement.sendKeys(faker.job().title());
+    }
+
+
+    @And("Hata mesajının görüntülendiği doğrulanır")
+    public void hataMesajınınGörüntülendiğiDoğrulanır() {
+
+        Assertions.assertTrue(melahatnurPage.hataMesaji.isDisplayed());
+    }
+
+    @And("About kismina karakter asimi bilgiler girilir")
+    public void aboutKisminaKaarakterAsimiBilgilerGirilir() {
+        Faker faker = new Faker();
+        WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(20));
+
+        ReusableMethods.bekle(2);
+
+        WebElement biographyElement = wait.until(ExpectedConditions.elementToBeClickable(melahatnurPage.biographyBox));
+
+        ((JavascriptExecutor) Driver.getDriver()).executeScript(
+                "arguments[0].scrollIntoView({block: 'center'});", biographyElement);
+        ReusableMethods.bekle(2);
+
+        biographyElement.clear();
+        biographyElement.sendKeys(faker.lorem().paragraph(100));
+
+        WebElement jobTitleElement = wait.until(ExpectedConditions.elementToBeClickable(melahatnurPage.jobTitleBox));
+        ((JavascriptExecutor) Driver.getDriver()).executeScript(
+                "arguments[0].scrollIntoView({block: 'center'});", jobTitleElement);
+        ReusableMethods.bekle(2);
+
+        jobTitleElement.clear();
+        jobTitleElement.sendKeys(faker.job().title());
+        WebDriverWait toastWait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(10));
+        toastWait.until(ExpectedConditions.invisibilityOf(melahatnurPage.toastMesaj));
+
+        melahatnurPage.saveButonu.click();
+
+
+    }
+
+    @And("Education'a bilgiler girilir")
+    public void educationABilgilerGirilir() {
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        Faker faker = new Faker();
+
+        wait.until(ExpectedConditions.elementToBeClickable(melahatnurPage.addEducationBtn));
+        melahatnurPage.addEducationBtn.click();
+
+        wait.until(ExpectedConditions.visibilityOf(melahatnurPage.newEducationModal));
+
+        WebElement schoolInput;
+        try {
+            schoolInput = wait.until(ExpectedConditions.elementToBeClickable(melahatnurPage.newEducationInput));
+        } catch (TimeoutException e) {
+            schoolInput = wait.until(ExpectedConditions.elementToBeClickable(
+                    By.cssSelector(".swal2-popup input[type='text'], .swal2-popup input:not([type])")
+            ));
         }
 
+        schoolInput.clear();
+        schoolInput.sendKeys(faker.university().name());
+
+        wait.until(ExpectedConditions.not(
+                ExpectedConditions.attributeToBe(schoolInput, "value", "")
+        ));
+
+        try {
+            wait.until(ExpectedConditions.elementToBeClickable(melahatnurPage.educationModalSaveBtn));
+            melahatnurPage.educationModalSaveBtn.click();
+        } catch (TimeoutException e1) {
+            try {
+                wait.until(ExpectedConditions.elementToBeClickable(melahatnurPage.educationModalConfirmBtn));
+                ((JavascriptExecutor) Driver.getDriver()).executeScript("arguments[0].click();", melahatnurPage.educationModalConfirmBtn);
+            } catch (TimeoutException e2) {
+                WebElement saveBtn = wait.until(ExpectedConditions.elementToBeClickable(
+                        By.xpath("//button[contains(@class,'swal2-confirm') and not(contains(@style,'display: none'))]")
+                ));
+                ((JavascriptExecutor) Driver.getDriver()).executeScript("arguments[0].click();", saveBtn);
+            }
+        }
+
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                By.cssSelector(".swal2-popup")
+        ));
+    }
+
+    @And("Experience bilgileri girilir")
+    public void experienceBilgileriGirilir() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        Faker faker = new Faker();
+        melahatnurPage.addExperience.click();
+        melahatnurPage.newExperienceBox.sendKeys(faker.job().position() + "at " + faker.company().name());
+
+        melahatnurPage.experinceSaveButon.click();
+
+    }
+
+    @And("Skills Topicsleri secer")
+    public void skillsTopicsleriSecer() {
+        Random random = new Random();
+        int randomIndex = random.nextInt(melahatnurPage.skillsTopicler.size());
+        WebElement secilecekTopic = melahatnurPage.skillsTopicler.get(randomIndex);
+        js.executeScript("arguments[0].scrollIntoView({block: 'center'});", secilecekTopic);
+        js.executeScript("arguments[0].click();", secilecekTopic);
+    }
+
+    @And("Select Account Type butonun tiklanabilir olmasi")
+    public void selectAccountTypeButonunTiklanabilirOlmasi() {
+        Assertions.assertTrue(melahatnurPage.selectAccountType.isEnabled());
+    }
+
+    @And("Zoom api bilgilerini girer")
+    public void zoomApiBilgileriniGirer() {
+        Faker faker = new Faker();
+        melahatnurPage.zoomClientID.click();
+        melahatnurPage.zoomClientID.clear();
+        melahatnurPage.zoomClientID.sendKeys(faker.internet().uuid());
+        melahatnurPage.zoomClientSecret.click();
+        melahatnurPage.zoomClientSecret.clear();
+        melahatnurPage.zoomClientSecret.sendKeys(faker.internet().uuid());
+        melahatnurPage.zoomAccountID.click();
+        melahatnurPage.zoomAccountID.clear();
+        melahatnurPage.zoomAccountID.sendKeys(faker.internet().uuid());
+    }
+
+    @And("Extra Information bilgilerini girer")
+    public void extraInformationBilgileriniGirer() {
+
+        Random random = new Random();
+        int randomIndex = random.nextInt(melahatnurPage.genders.size());
+        js.executeScript("arguments[0].click();", melahatnurPage.genders.get(randomIndex));
 
 
+        Faker faker = new Faker();
+        melahatnurPage.age.click();
+        melahatnurPage.age.sendKeys(String.valueOf(faker.number().numberBetween(18, 65)));
 
+        int meetingTypeIndex = random.nextInt(melahatnurPage.meetingType.size());
+        js.executeScript("arguments[0].click();", melahatnurPage.meetingType.get(meetingTypeIndex));
 
+        int trainingLevelIndex = random.nextInt(melahatnurPage.trainingLevel.size());
+        js.executeScript("arguments[0].click();", melahatnurPage.trainingLevel.get(trainingLevelIndex));
 
+        int countriesIndex = random.nextInt(melahatnurPage.countries.size());
+        js.executeScript("arguments[0].click();", melahatnurPage.countries.get(countriesIndex));
 
+        int provinceIndex = random.nextInt(melahatnurPage.provinces.size());
+        js.executeScript("arguments[0].click();", melahatnurPage.provinces.get(provinceIndex));
 
+        int cityIndex = random.nextInt(melahatnurPage.cities.size());
+        js.executeScript("arguments[0].click();", melahatnurPage.cities.get(cityIndex));
 
+        int districtIndex = random.nextInt(melahatnurPage.district.size());
+        js.executeScript("arguments[0].click();", melahatnurPage.district.get(districtIndex));
 
+        melahatnurPage.adress.click();
+        melahatnurPage.adress.sendKeys(faker.address().fullAddress());
 
+    }
+
+    @And("Delete account yaparak hesabi siler")
+    public void deleteAccountYaparakHesabiSiler() {
+        melahatnurPage.deleteAccount.click();
+        melahatnurPage.yesIconfirm.click();
+    }
 
 
     //========================================US036==========================================//
@@ -329,7 +579,7 @@ public class MelahatnurStepdefinitions {
     @Then("Search textbox’a geçerli bir anahtar kelime girer")
     public void searchTextboxAGeçerliBirAnahtarKelimeGirer() {
         melahatnurPage.blogSayfasindakiSearchTextBox.sendKeys("The Growing Impact of Online Education");
-        
+
     }
 
     @And("Search butonuna tıklar")
@@ -374,7 +624,7 @@ public class MelahatnurStepdefinitions {
     public void secilenBlogunYorumAlaninaGecerliYorumGirilir() {
 
         melahatnurPage.commentAlani.sendKeys("Cok basarili bir blog olmus.");
-        
+
     }
 
     @And("post comment butonuna tiklanir")
@@ -396,13 +646,13 @@ public class MelahatnurStepdefinitions {
     @Then("blogun konusunun gorunurlugunu kontrol eder")
     public void blogunKonusununGorunurlugunuKontrolEder() {
         Assertions.assertTrue(melahatnurPage.blogPaylasildigiKonu.isDisplayed());
-        
+
     }
 
     @And("blogun iceriginin gorunurlugunu kontrol eder")
     public void blogunIcerigininGorunurlugunuKontrolEder() {
         Assertions.assertTrue(melahatnurPage.blogPaylasildigiIcerik.isDisplayed());
-        
+
     }
 
     @And("blogu paylasan kisinin gorunurlugunu kontrol eder")

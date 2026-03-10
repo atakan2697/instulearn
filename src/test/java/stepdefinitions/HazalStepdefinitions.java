@@ -3,8 +3,10 @@ package stepdefinitions;
 import com.github.javafaker.Faker;
 import io.cucumber.java.en.*;
 import org.junit.jupiter.api.Assertions;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 import pages.HazalPage;
@@ -421,8 +423,9 @@ public class HazalStepdefinitions {
 
     @When("degisiklikleri kaydeder")
     public void degisiklikleri_kaydeder() {
-
-        throw new io.cucumber.java.PendingException("Henüz implement edilmedi");
+        WebElement saveBtn = Driver.getDriver().findElement(By.xpath("//button[text()='Save']"));
+        ((JavascriptExecutor) Driver.getDriver()).executeScript("arguments[0].scrollIntoView({block: 'center'});", saveBtn);
+        ((JavascriptExecutor) Driver.getDriver()).executeScript("arguments[0].click();", saveBtn);
     }
 
     @Then("yapilan degisikligin kaydedildigi dogrulanir")
