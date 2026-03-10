@@ -1,4 +1,4 @@
-@gg
+
 Feature: US046 support testleri
 
   Background:

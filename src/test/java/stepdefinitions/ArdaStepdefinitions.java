@@ -400,6 +400,35 @@ public class ArdaStepdefinitions {
         Assertions.assertTrue(ardaPage.notificationsSidebarLink.isEnabled());
         Assertions.assertTrue(ardaPage.settingsSidebarLink.isEnabled());
         Assertions.assertTrue(ardaPage.logoutSidebarLink.isEnabled());
+    }@And("View All Events linki gorunur ve aktif olmalidir")
+    public void view_all_events_linki_gorunur_ve_aktif_olmalidir() {
+        Assertions.assertTrue(ardaPage.viewAllEventsLink.isDisplayed());
+        Assertions.assertTrue(ardaPage.viewAllEventsLink.isEnabled());
+    }
+
+    @And("Dashboard bilgi karti linkleri gorunur olmalidir")
+    public void dashboard_bilgi_karti_linkleri_gorunur_olmalidir() {
+        Assertions.assertTrue(ardaPage.accountBalanceCard.isDisplayed());
+        Assertions.assertTrue(ardaPage.purchasedCoursesLink.isDisplayed());
+        Assertions.assertTrue(ardaPage.meetingsBodyLink.isDisplayed());
+        Assertions.assertTrue(ardaPage.supportMessagesLink.isDisplayed());
+        Assertions.assertTrue(ardaPage.commentsLink.isDisplayed());
+    }
+
+    @And("Dashboard bilgi karti linkleri tiklanabilir olmalidir")
+    public void dashboard_bilgi_karti_linkleri_tiklanabilir_olmalidir() {
+        Assertions.assertTrue(ardaPage.purchasedCoursesLink.isEnabled());
+        Assertions.assertTrue(ardaPage.meetingsBodyLink.isEnabled());
+        Assertions.assertTrue(ardaPage.supportMessagesLink.isEnabled());
+        Assertions.assertTrue(ardaPage.commentsLink.isEnabled());
+    }@And("Learning Statistics bolumu gorunur olmalidir")
+    public void learning_statistics_bolumu_gorunur_olmalidir() {
+        Assertions.assertTrue(ardaPage.learningStatisticsTitle.isDisplayed());
+    }
+
+    @And("Aylik ogrenme grafigi gorunur olmalidir")
+    public void aylik_ogrenme_grafigi_gorunur_olmalidir() {
+        Assertions.assertTrue(ardaPage.monthlyLearningChart.isDisplayed());
     }
 }
 

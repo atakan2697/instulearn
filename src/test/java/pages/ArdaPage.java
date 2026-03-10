@@ -205,6 +205,32 @@ public class ArdaPage {
     @FindBy(xpath = "//span[normalize-space()='Log out' or normalize-space()='Logout']/ancestor::a")
     public WebElement logoutSidebarLink;
 
+    // ===== US040 TC02 DASHBOARD BODY LINKS =====
+
+    @FindBy(xpath = "//a[normalize-space()='View all events']")
+    public WebElement viewAllEventsLink;
+
+    @FindBy(xpath = "//*[normalize-space()='Account Balance']")
+    public WebElement accountBalanceCard;
+
+    @FindBy(xpath = "//span[normalize-space()='Purchased Courses']/ancestor::a")
+    public WebElement purchasedCoursesLink;
+
+    @FindBy(xpath = "//span[normalize-space()='Meetings']/ancestor::a")
+    public WebElement meetingsBodyLink;
+
+    @FindBy(xpath = "//span[normalize-space()='Support Messages']/ancestor::a")
+    public WebElement supportMessagesLink;
+
+    @FindBy(xpath = "//span[normalize-space()='Comments']/ancestor::a")
+    public WebElement commentsLink;
+
+    @FindBy(xpath = "//*[normalize-space()='Learning Statistics']")
+    public WebElement learningStatisticsTitle;
+
+    @FindBy(id = "myChart")
+    public WebElement monthlyLearningChart;
+
 
 
 

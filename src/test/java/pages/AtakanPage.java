@@ -55,7 +55,7 @@ public class AtakanPage {
     @FindBy(xpath = "(//*[@class='mb-0 mr-10 cursor-pointer'])[4]")
     public WebElement downloadSecenegi;
 
-    @FindBy (xpath = "//div[@class='image-box']")
+    @FindBy (xpath = "(//div[@class='image-box'])[4]")
     public WebElement kursKartlariList;
 
     @FindBy(xpath = "//div[@class='webinar-price-box mt-25']")
